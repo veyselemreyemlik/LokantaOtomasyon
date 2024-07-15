@@ -1,7 +1,7 @@
 <?php
 include 'connection.php';
 include 'sidebar.php';
-include 'header.php';
+
 session_start();
 
 // Masaları ve sipariş durumlarını veritabanından çekme
@@ -82,44 +82,36 @@ if (!$result_total_reservation) {
 $total_reservation_data = $result_total_reservation->fetch_assoc();*/
 ?>
 
-<body style="background-color: red;">
+<body style="background-color:gainsboro">
     <div class="container-fluid mt-6 bg-blue">
         <div class="row">
-            <div class="col-md-2">
-                <div class="card text-center bg-red text-black mb-3">
-                    <div class="card-body">
-                        <h3 class="card-title"><?php echo $total_orders_data['total_orders']; ?></h3>
-                        <p class="card-text">Toplam Sipariş</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="card text-center bg-pink text-black mb-3">
+            <div class="col-md-3">
+                <div class="card text-center bg-success text-black mb-3">
                     <div class="card-body">
                         <h3 class="card-title"><?php echo $today_orders_data['today_orders']; ?></h3>
                         <p class="card-text">Bugünkü Siparişler</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-2">
-                <div class="card text-center bg-green text-black mb-3">
+            <div class="col-md-3">
+                <div class="card text-center bg-primary text-black mb-3">
                     <div class="card-body">
-                        <h3 class="card-title"><?php echo number_format($daily_orders_data['total_revenue'], 1); ?>k
+                        <h3 class="card-title"><?php echo number_format($daily_orders_data['total_revenue']); ?>TL
                         </h3>
                         <p class="card-text">Günlük Tutar</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-2">
-                <div class="card text-center bg-purple text-black mb-3">
+            <div class="col-md-3">
+                <div class="card text-center bg-secondary text-black mb-3">
                     <div class="card-body">
-                        <h3 class="card-title"><?php echo $total_customers_data['total_customers']; ?>k</h3>
+                        <h3 class="card-title"><?php echo $total_customers_data['total_customers']; ?></h3>
                         <p class="card-text">Toplam Müşteri</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-2">
-                <div class="card text-center bg-blue text-black mb-3">
+            <div class="col-md-3">
+                <div class="card text-center bg-info text-black mb-3">
                     <div class="card-body">
                         <h3 class="card-title"><?php echo $total_delivered_data['total_delivered']; ?></h3>
                         <p class="card-text">Teslim Edilen Sipariş</p>
@@ -128,51 +120,54 @@ $total_reservation_data = $result_total_reservation->fetch_assoc();*/
             </div>
 
         </div>
-        <div class="row" style="margin-top: 20px;">
-            <!-- Latest Order -->
-            <div class="col-md-4">
-                <h3>Son Siparişler</h3>
-                <div class="list-group">
-                    <?php
-                    $sql_latest_orders = "SELECT * FROM orders ORDER BY created_at DESC LIMIT 5";
-                    $result_latest_orders = $conn->query($sql_latest_orders);
-                    if ($result_latest_orders && $result_latest_orders->num_rows > 0) {
-                        while ($row = $result_latest_orders->fetch_assoc()) {
-                            echo '<a href="#" class="list-group-item list-group-item-action">';
-                            echo '<small> Order ID: ' . $row['id'] . ' | Table No: ' . $row['table_id'] . ' | Time: ' . $row['created_at'] . '</small>';
-                            echo '</a>';
-                        }
-                    } else {
-                        echo '<div class="alert alert-info">No recent orders.</div>';
-                    }
-                    ?>
-                </div>
-            </div>
 
-            <!-- Latest Online Order -->
-            <!-- Latest Completed Orders -->
-            <div class="col-md-4">
-                <h3>Tamamlanan Siparişler</h3>
-                <div class="list-group">
-                    <?php
-                    $sql_latest_completed_orders = "SELECT * FROM orders WHERE status = 'completed' ORDER BY created_at DESC LIMIT 5";
-                    $result_latest_completed_orders = $conn->query($sql_latest_completed_orders);
-                    if ($result_latest_completed_orders && $result_latest_completed_orders->num_rows > 0) {
-                        while ($row = $result_latest_completed_orders->fetch_assoc()) {
-                            echo '<a href="#" class="list-group-item list-group-item-action">';
-                            echo '<small>Order No.: (' . $row['id'] . ') | Table No: ' . $row['table_no'] . ' | Time: ' . $row['created_at'] . '</small>';
-                            echo '</a>';
-                        }
-                    } else {
-                        echo '<div class="alert alert-info">Son tamamlanmış sipariş yok.</div>';
-                    }
-                    ?>
-                </div>
-            </div>
-            <div class="col-md-4">
 
+    </div>
+    <div class="row" style="margin-top: 20px;">
+        <!-- Latest Order -->
+        <div class="col-md-6">
+            <h3>Son Siparişler</h3>
+            <div class="list-group">
+                <?php
+                $sql_latest_orders = "SELECT * FROM orders ORDER BY created_at DESC LIMIT 5";
+                $result_latest_orders = $conn->query($sql_latest_orders);
+                if ($result_latest_orders && $result_latest_orders->num_rows > 0) {
+                    while ($row = $result_latest_orders->fetch_assoc()) {
+                        echo '<a href="#" class="list-group-item list-group-item-action">';
+                        echo '<small> Order ID: ' . $row['id'] . ' | Table No: ' . $row['table_id'] . ' | Time: ' . $row['created_at'] . '</small>';
+                        echo '</a>';
+                    }
+                } else {
+                    echo '<div class="alert alert-info">No recent orders.</div>';
+                }
+                ?>
             </div>
         </div>
+
+        <!-- Latest Online Order -->
+        <!-- Latest Completed Orders -->
+        <div class="col-md-6">
+            <h3>Tamamlanan Siparişler</h3>
+            <div class="list-group">
+                <?php
+                $sql_latest_completed_orders = "SELECT * FROM orders WHERE status = 'completed' ORDER BY created_at DESC LIMIT 5";
+                $result_latest_completed_orders = $conn->query($sql_latest_completed_orders);
+                if ($result_latest_completed_orders && $result_latest_completed_orders->num_rows > 0) {
+                    while ($row = $result_latest_completed_orders->fetch_assoc()) {
+                        echo '<a href="#" class="list-group-item list-group-item-action">';
+                        echo '<small>Order No.: (' . $row['id'] . ') | Table No: ' . $row['table_no'] . ' | Time: ' . $row['created_at'] . '</small>';
+                        echo '</a>';
+                    }
+                } else {
+                    echo '<div class="alert alert-info">Son tamamlanmış sipariş yok.</div>';
+                }
+                ?>
+            </div>
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
