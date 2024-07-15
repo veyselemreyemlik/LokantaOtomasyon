@@ -1,6 +1,6 @@
 <?php
-include "connection.php";
-include "sidebar.php";
+include "../connection.php";
+include "../sidebar.php";
 ?>
 
 <!DOCTYPE html>

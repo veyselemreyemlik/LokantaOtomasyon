@@ -1,5 +1,5 @@
 <?php
-include 'connection.php';
+include '../connection.php';
 
 if (isset($_GET['menu_id'])) {
     $menu_id = $_GET['menu_id'];

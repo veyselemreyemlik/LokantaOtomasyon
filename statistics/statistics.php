@@ -1,6 +1,6 @@
 <?php
-include 'connection.php';
-include 'sidebar.php';
+include '../connection.php';
+include '../sidebar.php';
 
 // Satışları aylara göre almak için SQL sorgusu
 $sql = "SELECT MONTH(o.created_at) as month, SUM(mi.price) as total_revenue

@@ -1,5 +1,5 @@
 <?php
-include 'connection.php';
+include '../connection.php';
 
 if (isset($_GET['table_id'])) {
     $table_id = $_GET['table_id'];
