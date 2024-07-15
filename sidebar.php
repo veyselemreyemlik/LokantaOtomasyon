@@ -65,9 +65,9 @@
         <a href="admin.php"><i class="fas fa-home"></i> Ana Sayfa</a>
         <a href="menu.php"><i class="fas fa-utensils"></i> Menü </a>
         <a href="table.php"><i class="fas fa-table"></i> Masalar</a>
-        <a href="orders.php"><i class="fas fa-receipt"></i> Siparişler(yapılmadı)</a>
-        <a href="users.php"><i class="fas fa-users"></i> Kullanıcılar(yapılmadı)</a>
-        <a href="statistics.php"><i class="fas fa-cog"></i> İstatislik</a>
+        <a href="users.php"><i class="fas fa-users"></i> Kullanıcılar</a>
+        <a href="orders.php"><i class="fas fa-receipt"></i> Siparişler(yok)</a>
+        <a href="statistics.php"><i class="fas fa-cog"></i> İstatislik(yok)</a>
         <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Çıkış</a>
     </div>
     <div class="content">
