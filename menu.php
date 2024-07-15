@@ -20,6 +20,7 @@ include "sidebar.php"; ?>
         border-radius: 8px;
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         padding: 50px;
+
     }
 
     h1 {
@@ -32,6 +33,8 @@ include "sidebar.php"; ?>
 
     .table {
         margin-bottom: 0;
+        text-align: center;
+
     }
 
     .table thead th {
@@ -82,8 +85,10 @@ include "sidebar.php"; ?>
             <tbody class="table-secondary">
                 <?php
                 $sql = "SELECT mi.menu_id, mi.product_name, mi.price, p.place_name, mi.place_id 
-                            FROM menu_items mi 
-                            LEFT JOIN place p ON mi.place_id = p.place_id";
+                    FROM menu_items mi 
+                    LEFT JOIN place p ON mi.place_id = p.place_id
+                    ORDER BY p.place_name, mi.product_name";
+
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -95,12 +100,11 @@ include "sidebar.php"; ?>
                     <td><?php echo $row["price"]; ?> TL</td>
                     <td><?php echo $row["place_name"]; ?></td>
                     <td>
-                        <button type='button' class='btn btn-primary btn-sm' 
-                            data-bs-toggle='modal' data-bs-target='#exampleModal<?php echo $row["menu_id"]; ?>'>
+                        <button type='button' class='btn btn-primary btn-sm' data-bs-toggle='modal'
+                            data-bs-target='#exampleModal<?php echo $row["menu_id"]; ?>'>
                             Düzenle
                         </button>
-                        <a href='menu_delete.php?menu_id=<?php echo $row["menu_id"]; ?>' 
-                            class='btn btn-danger btn-sm' 
+                        <a href='menu_delete.php?menu_id=<?php echo $row["menu_id"]; ?>' class='btn btn-danger btn-sm'
                             onclick='return confirm("Bu ürünü silmek istediğinizden emin misiniz?")'>
                             Sil
                         </a>
@@ -123,8 +127,8 @@ include "sidebar.php"; ?>
                                     <input type='hidden' name='menu_id' value='<?php echo $row["menu_id"]; ?>'>
                                     <div class='mb-3'>
                                         <label for='product_name' class='form-label'>Ürün Adı</label>
-                                        <input type='text' class='form-control' id='product_name'
-                                            name='product_name' value='<?php echo $row["product_name"]; ?>' required>
+                                        <input type='text' class='form-control' id='product_name' name='product_name'
+                                            value='<?php echo $row["product_name"]; ?>' required>
                                     </div>
                                     <div class='mb-3'>
                                         <label for='price' class='form-label'>Fiyat</label>

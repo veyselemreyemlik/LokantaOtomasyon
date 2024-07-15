@@ -1,158 +1,176 @@
 <?php
-include 'connection.php';
-include 'sidebar.php';
-
-
-session_start();
-
-// Masaları ve sipariş durumlarını veritabanından çekme
-$sql_active_tables = "SELECT t.id AS table_id, t.table_name, u.username AS waiter_name
-                      FROM tables t
-                      LEFT JOIN orders o ON t.id = o.table_id
-                      LEFT JOIN users u ON o.user_id = u.id
-                      WHERE o.status IS NOT NULL
-                      GROUP BY t.id, t.table_name, u.username";
-$result_active_tables = $conn->query($sql_active_tables);
-
-$sql_inactive_tables = "SELECT t.id AS table_id, t.table_name
-                        FROM tables t
-                        LEFT JOIN orders o ON t.id = o.table_id
-                        WHERE o.status IS NULL";
-$result_inactive_tables = $conn->query($sql_inactive_tables);
+include "connection.php";
+include "sidebar.php";
 ?>
 
 <!DOCTYPE html>
 <html lang="tr">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masalar Genel Görünüm</title>
-    <link rel="stylesheet" href="view/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .chart-container {
-            position: relative;
-            height: 40vh;
-        }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+    }
 
-        .row {
-            margin-bottom: 20px;
-        }
+    .content {
+        padding: 50px;
+    }
 
-        h2 {
-            text-align: center;
-            margin-top: 20px;
-            font-style: oblique;
+    .table-container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        padding: 50px;
+    }
 
-        }
+    h1 {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #343a40;
+        text-align: center;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .table thead th {
+        background-color: #343a40;
+        color: #ffffff;
+    }
+
+    .table tbody tr:nth-of-type(odd) {
+        background-color: #f2f2f2;
+    }
+
+    .table tbody tr:hover {
+        background-color: #e9ecef;
+    }
+
+    .table tbody tr td {
+        vertical-align: middle;
+    }
+
+
+    .table {
+        text-align: center;
+    }
+
+
+
+    .table-container {
+        margin: auto;
+        padding-top: 20px;
+    }
     </style>
 </head>
 
-<body style="background-color: #f0f0f0;">
-    <div class="container-fluid mt-6">
-        <div class="row">
-            <!-- Main content -->
-            <!-- Masalar -->
-            <div class="container mt-4">
-                <h2>Masa Genel Görünüm</h2>
-                <div class="row row-cols-1 row-cols-md-5 g-4">
-                    <?php
-                    // Tüm masaları sorgula
-                    $sql = "SELECT t.*, COUNT(o.id) AS order_count
-                            FROM tables t
-                            LEFT JOIN orders o ON t.id = o.table_id
-                            GROUP BY t.id";
-                    $result = $conn->query($sql);
+<body>
+    <div class="table-container">
+        <h1>Masa Yönetimi</h1>
 
-                    if ($result && $result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            $table_id = $row['id'];
-                            $order_count = $row['order_count'];
-
-                            // Masanın arka plan rengini belirle
-                            $bg_color_class = ($order_count > 0) ? 'bg-success' : 'bg-primary';
-
-                            echo '<div class="col">';
-                            echo '<div class="card ' . $bg_color_class . '" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#masaModal' . $table_id . '">';
-                            echo '<div class="card-body">';
-                            echo '<h5 class="card-title">Masa ' . $row['table_name'] . '</h5>';
-                            if ($order_count > 0) {
-                                // Masada sipariş varsa, son alınan siparişi göster
-                                $last_order_sql = "SELECT o.*, u.username AS garson_name, GROUP_CONCAT(mi.name SEPARATOR ', ') AS menu_items
-                                                   FROM orders o
-                                                   LEFT JOIN users u ON o.user_id = u.id
-                                                   LEFT JOIN order_details od ON o.id = od.order_id
-                                                   LEFT JOIN menu_items mi ON od.menu_item_id = mi.id
-                                                   WHERE o.table_id = $table_id
-                                                   ORDER BY o.created_at DESC
-                                                   LIMIT 1";
-                                $last_order_result = $conn->query($last_order_sql);
-
-                                if ($last_order_result && $last_order_result->num_rows > 0) {
-                                    $last_order_row = $last_order_result->fetch_assoc();
-                                    echo '<p class="card-text">Siparişi Veren Garson: ' . $last_order_row['garson_name'] . '</p>';
-                                    echo '<p class="card-text">Tarihi ve Saati: ' . date('d.m.Y H:i', strtotime($last_order_row['created_at'])) . '</p>';
-                                }
-                            }
-                            echo '</div>';
-                            echo '</div>';
-                            echo '</div>';
-
-                            // Modal oluştur
-                            echo '<div class="modal fade" id="masaModal' . $table_id . '" tabindex="-1" aria-labelledby="masaModalLabel' . $table_id . '" aria-hidden="true">';
-                            echo '<div class="modal-dialog">';
-                            echo '<div class="modal-content">';
-                            echo '<div class="modal-header">';
-                            echo '<h5 class="modal-title" id="masaModalLabel' . $table_id . '">Masa ' . $row['table_name'] . ' Detayları</h5>';
-                            echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
-                            echo '</div>';
-                            echo '<div class="modal-body">';
-                            if ($order_count > 0) {
-                                // Masada sipariş varsa, son alınan siparişi göster
-                                echo '<p>Siparişi Veren Garson :' . $last_order_row['garson_name'] . '</p>';
-                                echo '<p>Sipariş İçeriği: ' . $last_order_row['menu_items'] . '</p>';
-                                echo '<p>Tarihi ve Saati: ' . date('d.m.Y H:i', strtotime($last_order_row['created_at'])) . '</p>';
-                            } else {
-                                echo '<p>Bu masada henüz sipariş yok.</p>';
-                            }
-                            echo '</div>';
-                            echo '<div class="modal-footer">';
-                            echo '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>';
-                            echo '</div>';
-                            echo '</div>';
-                            echo '</div>';
-                            echo '</div>';
-                        }
-                    } else {
-                        echo '<div class="alert alert-info">Hiç masa bulunamadı.</div>';
-                    }
-                    ?>
-                </div>
-            </div>
-
-
+        <!-- Ekleme Butonu -->
+        <div class="mb-3 text-end">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Yeni Masa Ekle
+            </button>
         </div>
 
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Masa Adı</th>
+                    <th scope="col">Aksiyon</th>
+                </tr>
+            </thead>
+            <tbody class="table-secondary">
+                <?php
+                $sql = "SELECT * FROM tables";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                ?>
+                <tr>
+                    <th scope='row'><?php echo $row["table_id"]; ?></th>
+                    <td><?php echo $row["table_name"]; ?></td>
+                    <td>
+                        <button type='button' class='btn btn-primary btn-sm' data-bs-toggle='modal'
+                            data-bs-target='#exampleModal<?php echo $row["table_id"]; ?>'>
+                            Düzenle
+                        </button>
+                        <a href='table_delete.php?table_id=<?php echo $row["table_id"]; ?>'
+                            class='btn btn-danger btn-sm'
+                            onclick='return confirm("Bu masayı silmek istediğinizden emin misiniz?")'>
+                            Sil
+                        </a>
+                    </td>
+                </tr>
+
+                <!-- Modal for editing each table item -->
+                <div class='modal fade' id='exampleModal<?php echo $row["table_id"]; ?>' tabindex='-1'
+                    aria-labelledby='exampleModalLabel' aria-hidden='true'>
+                    <div class='modal-dialog'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <h1 class='modal-title fs-5' id='exampleModalLabel'>Masa Düzenle</h1>
+                                <button type='button' class='btn-close' data-bs-dismiss='modal'
+                                    aria-label='Close'></button>
+                            </div>
+                            <div class='modal-body'>
+                                <!-- Form fields for editing -->
+                                <form action='table_update.php' method='POST'>
+                                    <input type='hidden' name='table_id' value='<?php echo $row["table_id"]; ?>'>
+                                    <div class='mb-3'>
+                                        <label for='table_name' class='form-label'>Masa Adı</label>
+                                        <input type='text' class='form-control' id='table_name' name='table_name'
+                                            value='<?php echo $row["table_name"]; ?>' required>
+                                    </div>
+                                    <button type='submit' class='btn btn-primary'>Kaydet</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php
+                    }
+                } else {
+                    echo "<tr><td colspan='3'>Masa bulunmamaktadır.</td></tr>";
+                }
+                $conn->close();
+                ?>
+            </tbody>
+        </table>
     </div>
 
+    <!-- Modal for adding a new table item -->
+    <div class='modal fade' id='exampleModal' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h1 class='modal-title fs-5' id='exampleModalLabel'>Yeni Masa Ekle</h1>
+                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                </div>
+                <div class='modal-body'>
+                    <!-- Form fields for adding a new table item -->
+                    <form action='table_add.php' method='POST'>
+                        <div class='mb-3'>
+                            <label for='table_name' class='form-label'>Masa Adı</label>
+                            <input type='text' class='form-control' id='table_name' name='table_name' required>
+                        </div>
+                        <button type='submit' class='btn btn-success'>Ekle</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
 </body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-    crossorigin="anonymous"></script>
-<script>
-    function showOrderDetails(tableId) {
-        fetch('fetch_order_details.php?table_id=' + tableId)
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('orderDetailsContent').innerHTML = data;
-                $('#orderDetailsModal').modal('show');
-            });
-    }
-</script>
-<?php include 'footer.php'; ?>
+
+</html>
