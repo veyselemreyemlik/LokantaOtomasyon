@@ -82,7 +82,7 @@ if (!$result_total_reservation) {
 $total_reservation_data = $result_total_reservation->fetch_assoc();*/
 ?>
 
-<body style="background-color: gray;">
+<body style="background-color: red;">
     <div class="container-fluid mt-6 bg-blue">
         <div class="row">
             <div class="col-md-2">
@@ -170,7 +170,7 @@ $total_reservation_data = $result_total_reservation->fetch_assoc();*/
                 </div>
             </div>
             <div class="col-md-4">
-               
+
             </div>
         </div>
     </div>
