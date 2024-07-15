@@ -38,48 +38,69 @@ $result_delivered_orders = $conn->query($sql_delivered_orders);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garson Paneli</title>
+    <title>Garson Sipariş Paneli</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <style>
         .quantity-input {
             text-align: center;
         }
+
+        body {
+            background-color: gainsboro;
+        }
+
+        .form-label {
+            color: darkblue;
+
+        }
+
+        .container.mt-4 {
+            width: 170%;
+
+
+        }
+
+        h1 {
+            color: darkblue;
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif
+        }
+
+        form-select-lg.mb-4 {
+            width: max-content;
+        }
     </style>
 </head>
 
 <body>
-    <div class="container mt-5">
-        <h1 class="mb-4">Hazır Siparişler</h1>
+    <hr>
+    <div class="container-xl mb-4 bg-3">
 
-        <div class="row">
-            <?php if ($result_prepared_orders && $result_prepared_orders->num_rows > 0): ?>
-                <?php while ($row = $result_prepared_orders->fetch_assoc()): ?>
-                    <div class="col-md-4 mb-4">
-                        <div class="card" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">Sipariş Numarası: <?php echo $row['order_id']; ?></h5>
-                                <h6 class="card-subtitle mb-2 text-body-secondary">Masa: <?php echo $row['table_name']; ?></h6>
-                                <p class="card-text">Sipariş Saati: <?php echo date('H:i', strtotime($row['order_time'])); ?>
-                                </p>
-                                <p class="card-text">Sipariş İçeriği: <?php echo $row['menu_items']; ?></p>
-                                <form action="garson.php" method="post">
-                                    <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
-                                    <button type="submit" name="deliver_order" class="card-link btn btn-success">Teslim
-                                        Edildi</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <div class="alert alert-info">Hazır sipariş bulunamadı.</div>
-            <?php endif; ?>
+        <div class="col-md-6">
+            <h3>Masa Seçimi Yapın</h3>
+            <select name="table_id" class="form-select-lg mb-4" aria-label=".from-select-lg example">
+                <?php
+                // Masaları veritabanından çekerek seçenekleri oluşturma
+                $sql = "SELECT * FROM tables";
+                $result = $conn->query($sql);
+
+                if ($result && $result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row['id'] . "'>" . $row['table_name'] . "</option>";
+                    }
+                } else {
+                    echo "<option value=''>Masa bulunamadı</option>";
+                }
+                ?>
+            </select>
+            <div class="invalid-feedback">
+                Please select a valid state.
+            </div>
+
+
         </div>
-
-        <hr>
-
-        <h1 class="mb-4">Menü</h1>
+        <h1 class="mb-5">Sipariş Oluştur</h1>
         <form action="garson.php" method="post"
             class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
             <div class="container">
@@ -88,7 +109,7 @@ $result_delivered_orders = $conn->query($sql_delivered_orders);
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Adı</th>
+                                    <th>Yemek Adı</th>
                                     <th>Fiyat</th>
                                     <th>Adet</th>
                                     <th>Açıklama</th>
@@ -102,16 +123,16 @@ $result_delivered_orders = $conn->query($sql_delivered_orders);
                                 if ($result && $result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
-                                        echo "<td>" . $row['name'] . "</td>";
+                                        echo "<td>" . $row['product_name'] . "</td>";
                                         echo "<td>" . $row['price'] . "</td>";
                                         echo "<td>";
                                         echo "<div class='input-group'>";
                                         echo "<button type='button' class='btn btn-sm btn-outline-secondary minus-btn'>-</button>";
-                                        echo "<input type='number' name='quantity[" . $row['id'] . "]' min='0' value='0' class='form-control quantity-input' style='width: 60px;' />";
+                                        echo "<input type='number' name='piece[" . $row['menu_id'] . "]' min='0' value='0' class='form-control quantity-input' style='width: 60px;' />";
                                         echo "<button type='button' class='btn btn-sm btn-outline-secondary plus-btn'>+</button>";
                                         echo "</div>";
                                         echo "</td>";
-                                        echo "<td><input type='text' name='note[" . $row['id'] . "]' class='form-control' placeholder='Açıklama girin'></td>";
+                                        echo "<td><input type='text' name='note[" . $row['menu_id'] . "]' class='form-control' placeholder='Açıklama girin'></td>";
                                         echo "</tr>";
                                     }
                                 } else {
@@ -121,28 +142,7 @@ $result_delivered_orders = $conn->query($sql_delivered_orders);
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-md-2">
-                        <label for="table_id" class="form-label">Masa Seçin:</label>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            <select name="table_id" id="table_id" class="form-select">
-                                <?php
-                                // Masaları veritabanından çekerek seçenekleri oluşturma
-                                $sql = "SELECT * FROM tables";
-                                $result = $conn->query($sql);
 
-                                if ($result && $result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<option value='" . $row['id'] . "'>" . $row['table_name'] . "</option>";
-                                    }
-                                } else {
-                                    echo "<option value=''>Masa bulunamadı</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
                     <div class="col-md-3">
                         <button type="submit" name="create_order" class="btn btn-primary">Sipariş Oluştur</button>
                     </div>
@@ -152,34 +152,6 @@ $result_delivered_orders = $conn->query($sql_delivered_orders);
         </form>
 
         <hr>
-
-        <h1 class="mb-4">Teslim Edilen Siparişler</h1>
-
-        <div class="row">
-            <?php if ($result_delivered_orders && $result_delivered_orders->num_rows > 0): ?>
-                <?php while ($row = $result_delivered_orders->fetch_assoc()): ?>
-                    <div class="col-md-4 mb-4">
-                        <div class="card" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">Sipariş Numarası: <?php echo $row['order_id']; ?></h5>
-                                <h6 class="card-subtitle mb-2 text-body-secondary">Masa: <?php echo $row['table_name']; ?></h6>
-                                <p class="card-text">Sipariş Saati: <?php echo date('H:i', strtotime($row['order_time'])); ?>
-                                </p>
-                                <p class="card-text">Sipariş İçeriği: <?php echo $row['menu_items']; ?></p>
-                                <form action="garson.php" method="post">
-                                    <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
-                                    <button type="submit" name="undeliver_order" class="card-link btn btn-warning">Teslim
-                                        Edilmedi</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <div class="alert alert-info">Teslim edilen sipariş bulunamadı.</div>
-            <?php endif; ?>
-        </div>
-
     </div>
 
     <?php
