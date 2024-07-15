@@ -5,22 +5,22 @@ include 'sidebar.php';
 session_start();
 
 // Masaları ve sipariş durumlarını veritabanından çekme
-$sql_active_tables = "SELECT t.id AS table_id, t.table_name, u.username AS waiter_name
+$sql_active_tables = "SELECT t.table_id AS table_id, t.table_name, u.username AS waiter_name
                       FROM tables t
-                      LEFT JOIN orders o ON t.id = o.table_id
-                      LEFT JOIN users u ON o.user_id = u.id
-                      WHERE o.status IS NOT NULL
-                      GROUP BY t.id, t.table_name, u.username";
+                      LEFT JOIN orders o ON t.table_id = o.table_id
+                      LEFT JOIN users u ON o.user_id = u.user_id
+                      WHERE o.status_number IS NOT NULL
+                      GROUP BY t.table_id, t.table_name, u.username";
 $result_active_tables = $conn->query($sql_active_tables);
 
 if (!$result_active_tables) {
     die("Sorgu hatası: " . $conn->error);
 }
 
-$sql_inactive_tables = "SELECT t.id AS table_id, t.table_name
+$sql_inactive_tables = "SELECT t.table_id AS table_id, t.table_name
                         FROM tables t
-                        LEFT JOIN orders o ON t.id = o.table_id
-                        WHERE o.status IS NULL";
+                        LEFT JOIN orders o ON t.table_id = o.table_id
+                        WHERE o.status_number IS NULL";
 $result_inactive_tables = $conn->query($sql_inactive_tables);
 
 if (!$result_inactive_tables) {
@@ -28,10 +28,10 @@ if (!$result_inactive_tables) {
 }
 // Günlük sipariş sayısı ve toplam ücret
 $current_date = date('Y-m-d');
-$sql_daily_orders = "SELECT COUNT(*) AS total_orders, SUM(mi.price * od.quantity) AS total_revenue
+$sql_daily_orders = "SELECT COUNT(*) AS total_orders, SUM(mi.price * od.piece) AS total_revenue
                      FROM orders o
-                     JOIN order_details od ON o.id = od.order_id
-                     JOIN menu_items mi ON od.menu_item_id = mi.id
+                     JOIN order_details od ON o.order_id = od.order_id
+                     JOIN menu_items mi ON od.menu_id = mi.menu_id
                      WHERE DATE(o.created_at) = '$current_date'";
 $result_daily_orders = $conn->query($sql_daily_orders);
 
@@ -66,7 +66,7 @@ if (!$result_total_customers) {
 $total_customers_data = $result_total_customers->fetch_assoc();
 
 // Toplam teslim edilen sipariş sayısı
-$sql_total_delivered = "SELECT COUNT(*) AS total_delivered FROM orders WHERE status = 'delivered'";
+$sql_total_delivered = "SELECT COUNT(*) AS total_delivered FROM orders WHERE status_number = 'delivered'";
 $result_total_delivered = $conn->query($sql_total_delivered);
 if (!$result_total_delivered) {
     die("Sorgu hatası: " . $conn->error);
