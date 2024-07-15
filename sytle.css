@@ -1,0 +1,78 @@
+/* style.css */
+
+/* Sidebar styling */
+.sidebar {
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+}
+
+.nav-link {
+    font-size: 1.1rem;
+}
+
+/* Card styling for tables */
+.card {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+/* Card colors for table statuses */
+.bg-secondary {
+    background-color: grey !important;
+}
+
+.bg-success {
+    background-color: green !important;
+}
+
+.bg-warning {
+    background-color: orange !important;
+}
+
+.panels {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+.panel {
+    flex: 1;
+    background: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 5px;
+}
+.panel h2 {
+    margin-top: 0;
+}
+.float-container {
+    border: 3px solid #0d1d53;
+    padding: 20px;
+}
+
+.float-child {
+    width: 50%;
+    float: left;
+    padding: 20px;
+    border: 2px solid red;
+}  
+.container-fluid.mt-6 {
+    margin-top: 6rem;
+    margin-bottom: 6rem;
+    background-color: red;
+}
+.row{
+    background-color: #161d32;
+}
+.container-fluid.mt-4 {
+    background-color: aqua;
+}
+
