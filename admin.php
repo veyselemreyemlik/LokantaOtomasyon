@@ -1,7 +1,6 @@
 <?php
 include 'connection.php';
 include 'sidebar.php';
-include 'header.php';
 session_start();
 
 // Masaları ve sipariş durumlarını veritabanından çekme
