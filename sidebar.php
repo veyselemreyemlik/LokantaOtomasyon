@@ -62,7 +62,7 @@
     </script>
 
     <div class="sidebar">
-        <a href="../admin.php"><i class="fas fa-home"></i> Ana Sayfa</a>
+        <a href="../admin/admin.php"><i class="fas fa-home"></i> Ana Sayfa</a>
         <a href="../menu/menu.php"><i class="fas fa-utensils"></i> Menü </a>
         <a href="../table/table.php"><i class="fas fa-table"></i> Masalar</a>
         <a href="../user/users.php"><i class="fas fa-users"></i> Kullanıcılar</a>
