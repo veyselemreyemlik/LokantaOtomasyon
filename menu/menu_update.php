@@ -5,12 +5,12 @@ include "../connection.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Formdan gelen verileri al
     $menu_id = $_POST["menu_id"];
-    $product_name = $_POST["product_name"];
+    $menu_name = $_POST["menu_name"];
     $price = $_POST["price"];
     $place_id = $_POST["place_id"];
 
     // Güncelleme sorgusu
-    $sql = "UPDATE menu_items SET product_name='$product_name', price='$price', place_id='$place_id' WHERE menu_id='$menu_id'";
+    $sql = "UPDATE menu_items SET menu_name='$menu_name', price='$price', place_id='$place_id' WHERE menu_id='$menu_id'";
 
     if ($conn->query($sql) === TRUE) {
         // Başarıyla güncellendiğini bildir ve anasayfaya yönlendir

@@ -65,6 +65,7 @@ $months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "A�
         margin-top: 50px;
     }
 </style>
+
 <div class="row">
     <div class="col-md-7">
 
