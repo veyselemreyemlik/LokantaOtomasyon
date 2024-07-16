@@ -84,10 +84,10 @@ include "../sidebar.php"; ?>
             </thead>
             <tbody class="table-secondary">
                 <?php
-                $sql = "SELECT mi.menu_id, mi.product_name, mi.price, p.place_name, mi.place_id 
+                $sql = "SELECT mi.menu_id, mi.menu_name, mi.price, p.place_name, mi.place_id 
                     FROM menu_items mi 
                     LEFT JOIN place p ON mi.place_id = p.place_id
-                    ORDER BY p.place_name, mi.product_name";
+                    ORDER BY p.place_name, mi.menu_name";
 
                 $result = $conn->query($sql);
 
@@ -96,7 +96,7 @@ include "../sidebar.php"; ?>
                 ?>
                 <tr>
                     <th scope='row'><?php echo $row["menu_id"]; ?></th>
-                    <td><?php echo $row["product_name"]; ?></td>
+                    <td><?php echo $row["menu_name"]; ?></td>
                     <td><?php echo $row["price"]; ?> TL</td>
                     <td><?php echo $row["place_name"]; ?></td>
                     <td>
@@ -126,9 +126,9 @@ include "../sidebar.php"; ?>
                                 <form action='menu_update.php' method='POST'>
                                     <input type='hidden' name='menu_id' value='<?php echo $row["menu_id"]; ?>'>
                                     <div class='mb-3'>
-                                        <label for='product_name' class='form-label'>Ürün Adı</label>
-                                        <input type='text' class='form-control' id='product_name' name='product_name'
-                                            value='<?php echo $row["product_name"]; ?>' required>
+                                        <label for='menu_name' class='form-label'>Ürün Adı</label>
+                                        <input type='text' class='form-control' id='menu_name' name='menu_name'
+                                            value='<?php echo $row["menu_name"]; ?>' required>
                                     </div>
                                     <div class='mb-3'>
                                         <label for='price' class='form-label'>Fiyat</label>
@@ -175,8 +175,8 @@ include "../sidebar.php"; ?>
                     <!-- Form fields for adding a new menu item -->
                     <form action='menu_add.php' method='POST'>
                         <div class='mb-3'>
-                            <label for='product_name' class='form-label'>Ürün Adı</label>
-                            <input type='text' class='form-control' id='product_name' name='product_name' required>
+                            <label for='menu_name' class='form-label'>Ürün Adı</label>
+                            <input type='text' class='form-control' id='menu_name' name='menu_name' required>
                         </div>
                         <div class='mb-3'>
                             <label for='price' class='form-label'>Fiyat</label>
