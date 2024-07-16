@@ -150,7 +150,7 @@ $total_reservation_data = $result_total_reservation->fetch_assoc();*/
             <h3>Tamamlanan Siparişler</h3>
             <div class="list-group">
                 <?php
-                $sql_latest_completed_orders = "SELECT * FROM orders WHERE status = 'completed' ORDER BY created_at DESC LIMIT 5";
+                $sql_latest_completed_orders = "SELECT * FROM orders WHERE status_number = 'delivered' ORDER BY created_at DESC LIMIT 5";
                 $result_latest_completed_orders = $conn->query($sql_latest_completed_orders);
                 if ($result_latest_completed_orders && $result_latest_completed_orders->num_rows > 0) {
                     while ($row = $result_latest_completed_orders->fetch_assoc()) {
