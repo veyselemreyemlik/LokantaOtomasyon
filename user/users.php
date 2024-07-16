@@ -1,5 +1,7 @@
-<?php include "connection.php";
-include "sidebar.php"; ?>
+<?php
+include "../connection.php";
+include "../sidebar.php";
+?>
 
 <!DOCTYPE html>
 <html lang="tr">
@@ -20,7 +22,6 @@ include "sidebar.php"; ?>
         border-radius: 8px;
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         padding: 50px;
-
     }
 
     h1 {
@@ -34,7 +35,6 @@ include "sidebar.php"; ?>
     .table {
         margin-bottom: 0;
         text-align: center;
-
     }
 
     .table thead th {
@@ -52,6 +52,8 @@ include "sidebar.php"; ?>
 
     .table tbody tr td {
         vertical-align: middle;
+        text-align: center;
+        /* Hücre içeriğini ortala */
     }
 
     .table-container {
@@ -63,12 +65,12 @@ include "sidebar.php"; ?>
 
 <body>
     <div class="table-container">
-        <h1>Menü Yönetimi</h1>
+        <h1>Kullanıcı Yönetimi</h1>
 
         <!-- Ekleme Butonu -->
         <div class="mb-3 text-end">
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Yeni Ürün Ekle
+                Yeni Kullanıcı Ekle
             </button>
         </div>
 
@@ -76,74 +78,84 @@ include "sidebar.php"; ?>
             <thead class="table-dark">
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Ürün Adı</th>
-                    <th scope="col">Fiyat</th>
+                    <th scope="col">Kullanıcı Adı</th>
                     <th scope="col">Yer</th>
+                    <th scope="col">Şifre</th>
                     <th scope="col">Aksiyon</th>
                 </tr>
             </thead>
             <tbody class="table-secondary">
                 <?php
-                $sql = "SELECT mi.menu_id, mi.product_name, mi.price, p.place_name, mi.place_id 
-                    FROM menu_items mi 
-                    LEFT JOIN place p ON mi.place_id = p.place_id
-                    ORDER BY p.place_name, mi.product_name";
-
+                $sql = "SELECT u.user_id,u.password ,u.username, p.place_name 
+                        FROM users u 
+                        LEFT JOIN place p ON u.place_id = p.place_id";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                 ?>
                 <tr>
-                    <th scope='row'><?php echo $row["menu_id"]; ?></th>
-                    <td><?php echo $row["product_name"]; ?></td>
-                    <td><?php echo $row["price"]; ?> TL</td>
+                    <th scope='row'><?php echo $row["user_id"]; ?></th>
+                    <td><?php echo $row["username"]; ?></td>
                     <td><?php echo $row["place_name"]; ?></td>
+                    <td><?php echo $row["password"]; ?></td>
+
                     <td>
                         <button type='button' class='btn btn-primary btn-sm' data-bs-toggle='modal'
-                            data-bs-target='#exampleModal<?php echo $row["menu_id"]; ?>'>
+                            data-bs-target='#exampleModal<?php echo $row["user_id"]; ?>'>
                             Düzenle
                         </button>
-                        <a href='menu_delete.php?menu_id=<?php echo $row["menu_id"]; ?>' class='btn btn-danger btn-sm'
-                            onclick='return confirm("Bu ürünü silmek istediğinizden emin misiniz?")'>
+                        <a href='user_delete.php?user_id=<?php echo $row["user_id"]; ?>' class='btn btn-danger btn-sm'
+                            onclick='return confirm("Bu kullanıcıyı silmek istediğinizden emin misiniz?")'>
                             Sil
                         </a>
                     </td>
                 </tr>
 
-                <!-- Modal for editing each menu item -->
-                <div class='modal fade' id='exampleModal<?php echo $row["menu_id"]; ?>' tabindex='-1'
+                <!-- Modal for editing each user -->
+                <div class='modal fade' id='exampleModal<?php echo $row["user_id"]; ?>' tabindex='-1'
                     aria-labelledby='exampleModalLabel' aria-hidden='true'>
                     <div class='modal-dialog'>
                         <div class='modal-content'>
                             <div class='modal-header'>
-                                <h1 class='modal-title fs-5' id='exampleModalLabel'>Ürünü Düzenle</h1>
+                                <h1 class='modal-title fs-5' id='exampleModalLabel'>Kullanıcı Düzenle</h1>
                                 <button type='button' class='btn-close' data-bs-dismiss='modal'
                                     aria-label='Close'></button>
                             </div>
                             <div class='modal-body'>
                                 <!-- Form fields for editing -->
-                                <form action='menu_update.php' method='POST'>
-                                    <input type='hidden' name='menu_id' value='<?php echo $row["menu_id"]; ?>'>
+                                <form action='user_update.php' method='POST'>
+                                    <input type='hidden' name='user_id' value='<?php echo $row["user_id"]; ?>'>
                                     <div class='mb-3'>
-                                        <label for='product_name' class='form-label'>Ürün Adı</label>
-                                        <input type='text' class='form-control' id='product_name' name='product_name'
-                                            value='<?php echo $row["product_name"]; ?>' required>
+                                        <label for='username' class='form-label'>Kullanıcı Adı</label>
+                                        <input type='text' class='form-control' id='username' name='username'
+                                            value='<?php echo $row["username"]; ?>' required>
                                     </div>
                                     <div class='mb-3'>
-                                        <label for='price' class='form-label'>Fiyat</label>
-                                        <input type='text' class='form-control' id='price' name='price'
-                                            value='<?php echo $row["price"]; ?>' required>
+                                        <label for='password' class='form-label'>Parola</label>
+                                        <input type='text' class='form-control' id='password' name='password'
+                                            value='<?php echo $row["password"]; ?>' required>
                                     </div>
+
                                     <div class='mb-3'>
                                         <label for='place_id' class='form-label'>Yer</label>
                                         <select class='form-select' id='place_id' name='place_id' required>
-                                            <option value='1' <?php echo ($row['place_id'] == 1 ? 'selected' : ''); ?>>
-                                                Izgara</option>
-                                            <option value='2' <?php echo ($row['place_id'] == 2 ? 'selected' : ''); ?>>
+                                            <option value='1'
+                                                <?php echo (isset($row['place_id']) && $row['place_id'] == 1 ? 'selected' : ''); ?>>
+                                                Izgara
+                                            </option>
+                                            <option value='2'
+                                                <?php echo (isset($row['place_id']) && $row['place_id'] == 2 ? 'selected' : ''); ?>>
                                                 Mutfak</option>
-                                            <option value='3' <?php echo ($row['place_id'] == 3 ? 'selected' : ''); ?>>
+                                            <option value='3'
+                                                <?php echo (isset($row['place_id']) && $row['place_id'] == 3 ? 'selected' : ''); ?>>
                                                 Fırın</option>
+                                            <option value='4'
+                                                <?php echo (isset($row['place_id']) && $row['place_id'] == 4 ? 'selected' : ''); ?>>
+                                                Kasa</option>
+                                            <option value='5'
+                                                <?php echo (isset($row['place_id']) && $row['place_id'] == 5 ? 'selected' : ''); ?>>
+                                                Bahçe</option>
                                         </select>
                                     </div>
                                     <button type='submit' class='btn btn-primary'>Kaydet</button>
@@ -155,7 +167,7 @@ include "sidebar.php"; ?>
                 <?php
                     }
                 } else {
-                    echo "<tr><td colspan='5'>Menüde ürün bulunmamaktadır.</td></tr>";
+                    echo "<tr><td colspan='4'>Kullanıcı bulunmamaktadır.</td></tr>";
                 }
                 $conn->close();
                 ?>
@@ -163,31 +175,34 @@ include "sidebar.php"; ?>
         </table>
     </div>
 
-    <!-- Modal for adding a new menu item -->
+    <!-- Modal for adding a new user -->
     <div class='modal fade' id='exampleModal' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
         <div class='modal-dialog'>
             <div class='modal-content'>
                 <div class='modal-header'>
-                    <h1 class='modal-title fs-5' id='exampleModalLabel'>Yeni Ürün Ekle</h1>
+                    <h1 class='modal-title fs-5' id='exampleModalLabel'>Yeni Kullanıcı Ekle</h1>
                     <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                 </div>
                 <div class='modal-body'>
-                    <!-- Form fields for adding a new menu item -->
-                    <form action='menu_add.php' method='POST'>
+                    <!-- Form fields for adding a new user -->
+                    <form action='user_add.php' method='POST'>
                         <div class='mb-3'>
-                            <label for='product_name' class='form-label'>Ürün Adı</label>
-                            <input type='text' class='form-control' id='product_name' name='product_name' required>
+                            <label for='username' class='form-label'>Kullanıcı Adı</label>
+                            <input type='text' class='form-control' id='username' name='username' required>
                         </div>
                         <div class='mb-3'>
-                            <label for='price' class='form-label'>Fiyat</label>
-                            <input type='text' class='form-control' id='price' name='price' required>
+                            <label for='password' class='form-label'>Parola</label>
+                            <input type='text' class='form-control' id='password' name='password' required>
                         </div>
+
                         <div class='mb-3'>
                             <label for='place_id' class='form-label'>Yer</label>
                             <select class='form-select' id='place_id' name='place_id' required>
                                 <option value='1'>Izgara</option>
                                 <option value='2'>Mutfak</option>
                                 <option value='3'>Fırın</option>
+                                <option value='4'>Kasa</option>
+                                <option value='5'>Bahçe</option>
                             </select>
                         </div>
                         <button type='submit' class='btn btn-success'>Ekle</button>
