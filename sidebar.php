@@ -67,7 +67,7 @@
         <a href="../table/table.php"><i class="fas fa-table"></i> Masalar</a>
         <a href="../user/users.php"><i class="fas fa-users"></i> Kullanıcılar</a>
         <a href="../order/order.php"><i class="fas fa-receipt"></i> Siparişler</a>
-        <a href="../statistics/statistics.php"><i class="fas fa-cog"></i> İstatislik(yok)</a>
+        <a href="../statistics/statistics.php"><i class="fas fa-cog"></i> İstatislik</a>
         
     </div>
     <div class="content">
