@@ -10,7 +10,7 @@ if (isset($_SESSION['user_id'])) {
 
     if ($result && $result->num_rows == 1) {
         $user = $result->fetch_assoc();
-        
+
         // Kullanıcının place_id'sine göre yönlendirme yap
         switch ($user['place_id']) {
             case 1:
@@ -72,13 +72,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-          crossorigin="anonymous">
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <style>
         .container {
             max-width: 400px;
@@ -86,25 +86,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </style>
 </head>
+
 <body>
-<div class="container">
-    <h2 class="mb-4">Giriş Yap</h2>
-    <?php if (isset($error_message)) : ?>
-        <div class="alert alert-danger"><?php echo $error_message; ?></div>
-    <?php endif; ?>
-    <form method="post">
-        <div class="form-group">
-            <label for="username">Kullanıcı Adı</label>
-            <input type="text" class="form-control" id="username" name="username" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Şifre</label>
-            <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Giriş Yap</button>
-    </form>
-</div>
+    <div class="container">
+        <h2 class="mb-4">Giriş Yap</h2>
+        <?php if (isset($error_message)): ?>
+            <div class="alert alert-danger"><?php echo $error_message; ?></div>
+        <?php endif; ?>
+        <form method="post">
+            <div class="form-group">
+                <label for="username">Kullanıcı Adı</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Şifre</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Giriş Yap</button>
+        </form>
+    </div>
 </body>
+
 </html>
 
 <?php include 'footer.php'; ?>

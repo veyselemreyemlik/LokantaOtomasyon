@@ -134,7 +134,7 @@ $total_reservation_data = $result_total_reservation->fetch_assoc();*/
                 if ($result_latest_orders && $result_latest_orders->num_rows > 0) {
                     while ($row = $result_latest_orders->fetch_assoc()) {
                         echo '<a href="#" class="list-group-item list-group-item-action">';
-                        echo '<small> Order ID: ' . $row['id'] . ' | Table No: ' . $row['table_id'] . ' | Time: ' . $row['created_at'] . '</small>';
+                        echo '<small> Order ID: ' . $row['order_id'] . ' | Table No: ' . $row['table_id'] . ' | Time: ' . $row['created_at'] . '</small>';
                         echo '</a>';
                     }
                 } else {

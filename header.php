@@ -3,6 +3,7 @@
         overflow: hidden;
         background-color: #f1f1f1;
         padding: 20px 10px;
+        width: 100%;
     }
 
     /* Style the header links */
@@ -66,6 +67,7 @@
             <a href="#contact">Siparişler</a>
             <a href="#about">Menü</a>
             <a href="#masalar">Masalar</a>
+            <a href="#masalar">Kullanıcı Adı</a>
         </div>
     </div>
 </nav>
