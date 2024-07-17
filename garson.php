@@ -1,5 +1,6 @@
 <?php
 include 'connection.php';
+include 'header.php';
 session_start();
 
 // Fetch table statuses
@@ -29,18 +30,38 @@ $conn->close();
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container-fluid {
+            width: 80%;
+            height: 100%;
+            padding-left: 200px;
+            padding-right: 100px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+
         .table-container {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
+            padding-left: 0px;
+            padding-top: 50px;
+            grid-gap: 10px;
         }
 
         .table-box {
-            padding: 20px;
+            padding: 35px;
             text-align: center;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
             color: white;
             font-size: 20px;
             cursor: pointer;
+            border-radius: 5px;
+            width: 220px;
+            height: 100px;
+            transition: background-color 0.3s ease;
         }
 
         .empty {
@@ -50,18 +71,40 @@ $conn->close();
         .occupied {
             background-color: green;
         }
+
+        .table-box:hover {
+            opacity: 0.8;
+        }
+
+        .table-box:hover:after {
+            content: attr(data-text);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 16px;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 40px;
+        }
     </style>
 </head>
 
 <body>
     <h2>Sipariş Oluşturma Sayfası</h2>
-    <div class="table-container">
-        <?php foreach ($tables as $table): ?>
-            <div class="table-box <?php echo $table['status'] == 1 ? 'occupied' : 'empty'; ?>"
-                onclick="handleClick(<?php echo $table['table_id']; ?>, <?php echo $table['status']; ?>)">
-                Masa <?php echo $table['table_id']; ?>
-            </div>
-        <?php endforeach; ?>
+    <div class="container-fluid">
+        <div class="table-container">
+            <?php foreach ($tables as $table): ?>
+                <div class="table-box <?php echo $table['status'] == 1 ? 'occupied' : 'empty'; ?>"
+                    data-text="<?php echo $table['status'] == 1 ? '' : 'Masa Boş'; ?>"
+                    onclick="handleClick(<?php echo $table['table_id']; ?>, <?php echo $table['status']; ?>)">
+                    Masa <?php echo $table['table_id']; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </div>
     <script>
         function handleClick(tableId, status) {
