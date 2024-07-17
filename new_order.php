@@ -23,8 +23,8 @@ $conn->close();
     <title>Yeni Sipariş</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -33,7 +33,7 @@ $conn->close();
 
         .order-form {
             background-color: #fff;
-            padding: 20px;
+            padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 400px;
@@ -88,6 +88,14 @@ $conn->close();
             margin-bottom: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            font-weight: initial;
         }
     </style>
 </head>
