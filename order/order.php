@@ -50,18 +50,15 @@ if (count($tables) > 0) {
 ?>
 <style>
     .card-body {
+        
         height: 180px;
         width: 200px;
         
     }
-    .card mb-3 {
-        text-align: center;
-    }
-    
 </style>
-    <div class="col-md-3">
-        <div class="card mb-3 <?php echo $card_color; ?>" style="max-width: 18rem;">
-            <div class="card-body">
+    <div class="col-md-3" ">
+        <div class="card mb-3 <?php echo $card_color; ?>" style="max-width: 18rem; ">
+            <div class="card-body" >
                 <h5 class="card-title">Masa <?php echo htmlspecialchars($table['table_name']); ?></h5>
                 <?php if (isset($table['order_id']) && $table['status_number'] != 3): ?>
                     <h6 class="card-subtitle mb-2 text-body-secondary">Sipariş Numarası: <?php echo $table['order_id']; ?></h6>
@@ -92,6 +89,9 @@ if (count($tables) > 0) {
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            <?php if ($table['status_number'] == 2): ?>
+            <button type="button" class="btn btn-danger" onclick="confirmPayment(<?php echo $table['order_id']; ?>)">Ödeme Yapıldı</button>
+            <?php endif; ?>
           </div>
         </div>
       </div>
@@ -121,4 +121,22 @@ $(document).ready(function() {
         });
     });
 });
+
+function confirmPayment(orderId) {
+    if (confirm('Ödeme yapıldığından emin misiniz?')) {
+        $.ajax({
+            url: 'update_order_status.php',
+            type: 'POST',
+            data: { order_id: orderId },
+            success: function(response) {
+                if (response == 'success') {
+                    alert('Ödeme yapıldı ve durum güncellendi.');
+                    location.reload(); // Sayfayı yenileyerek güncel durumu göster
+                } else {
+                    alert('Hata: ' + response);
+                }
+            }
+        });
+    }
+}
 </script>

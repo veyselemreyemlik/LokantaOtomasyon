@@ -4,82 +4,55 @@ include '../sidebar.php';
 
 session_start();
 
-// Masaları ve sipariş durumlarını veritabanından çekme
-$sql_active_tables = "SELECT t.table_id AS table_id, t.table_name, u.username AS waiter_name
-                      FROM tables t
-                      LEFT JOIN orders o ON t.table_id = o.table_id
-                      LEFT JOIN users u ON o.user_id = u.user_id
-                      WHERE o.status_number IS NOT NULL
-                      GROUP BY t.table_id, t.table_name, u.username";
-$result_active_tables = $conn->query($sql_active_tables);
-
-if (!$result_active_tables) {
-    die("Sorgu hatası: " . $conn->error);
-}
-
-$sql_inactive_tables = "SELECT t.table_id AS table_id, t.table_name
-                        FROM tables t
-                        LEFT JOIN orders o ON t.table_id = o.table_id
-                        WHERE o.status_number IS NULL";
-$result_inactive_tables = $conn->query($sql_inactive_tables);
-
-if (!$result_inactive_tables) {
-    die("Sorgu hatası: " . $conn->error);
-}
-// Günlük sipariş sayısı ve toplam ücret
+// Günlük sipariş sayısı
 $current_date = date('Y-m-d');
-$sql_daily_orders = "SELECT COUNT(*) AS total_orders, SUM(mi.price * od.piece) AS total_revenue
-                     FROM orders o
-                     JOIN order_details od ON o.order_id = od.order_id
-                     JOIN menu_items mi ON od.menu_id = mi.menu_id
-                     WHERE DATE(o.created_at) = '$current_date'";
-$result_daily_orders = $conn->query($sql_daily_orders);
-
-if (!$result_daily_orders) {
-    die("Sorgu hatası: " . $conn->error);
-}
-
-$daily_orders_data = $result_daily_orders->fetch_assoc();
-
-// Toplam sipariş sayısı
-$sql_total_orders = "SELECT COUNT(*) AS total_orders FROM orders";
-$result_total_orders = $conn->query($sql_total_orders);
-if (!$result_total_orders) {
-    die("Sorgu hatası: " . $conn->error);
-}
-$total_orders_data = $result_total_orders->fetch_assoc();
-
-// Bugünkü sipariş sayısı
-$sql_today_orders = "SELECT COUNT(*) AS today_orders FROM orders WHERE DATE(created_at) = '$current_date'";
+$sql_today_orders = "SELECT COUNT(*) AS today_orders 
+                     FROM orders 
+                     WHERE DATE(created_at) = '$current_date'";
 $result_today_orders = $conn->query($sql_today_orders);
+
 if (!$result_today_orders) {
     die("Sorgu hatası: " . $conn->error);
 }
 $today_orders_data = $result_today_orders->fetch_assoc();
 
-// Toplam müşteri sayısı
-$sql_total_customers = "SELECT COUNT(DISTINCT user_id) AS total_customers FROM orders";
-$result_total_customers = $conn->query($sql_total_customers);
-if (!$result_total_customers) {
-    die("Sorgu hatası: " . $conn->error);
-}
-$total_customers_data = $result_total_customers->fetch_assoc();
+// Anlık dolu masa sayısı (status_number 0, 1 veya 2 olan masalar)
+$sql_active_tables = "SELECT COUNT(DISTINCT table_id) AS active_tables 
+                      FROM orders 
+                      WHERE status_number IN (0, 1, 2)";
+$result_active_tables = $conn->query($sql_active_tables);
 
-// Toplam teslim edilen sipariş sayısı
-$sql_total_delivered = "SELECT COUNT(*) AS total_delivered FROM orders WHERE status_number = 'delivered'";
-$result_total_delivered = $conn->query($sql_total_delivered);
-if (!$result_total_delivered) {
+if (!$result_active_tables) {
     die("Sorgu hatası: " . $conn->error);
 }
-$total_delivered_data = $result_total_delivered->fetch_assoc();
+$active_tables_data = $result_active_tables->fetch_assoc();
 
-/* Toplam rezervasyon sayısı
-$sql_total_reservation = "SELECT COUNT(*) AS total_reservation FROM reservations";
-$result_total_reservation = $conn->query($sql_total_reservation);
-if (!$result_total_reservation) {
+// Günlük hasılat
+$sql_daily_revenue = "SELECT SUM(mi.price * od.piece) AS total_revenue 
+                      FROM orders o
+                      JOIN order_details od ON o.order_id = od.order_id
+                      JOIN menu_items mi ON od.menu_id = mi.menu_id
+                      WHERE DATE(o.created_at) = '$current_date'";
+$result_daily_revenue = $conn->query($sql_daily_revenue);
+
+if (!$result_daily_revenue) {
     die("Sorgu hatası: " . $conn->error);
 }
-$total_reservation_data = $result_total_reservation->fetch_assoc();*/
+$daily_revenue_data = $result_daily_revenue->fetch_assoc();
+
+// Aylık hasılat
+$current_month = date('Y-m');
+$sql_monthly_revenue = "SELECT SUM(mi.price * od.piece) AS total_revenue 
+                        FROM orders o
+                        JOIN order_details od ON o.order_id = od.order_id
+                        JOIN menu_items mi ON od.menu_id = mi.menu_id
+                        WHERE DATE_FORMAT(o.created_at, '%Y-%m') = '$current_month'";
+$result_monthly_revenue = $conn->query($sql_monthly_revenue);
+
+if (!$result_monthly_revenue) {
+    die("Sorgu hatası: " . $conn->error);
+}
+$monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
 ?>
 
 <body style="background-color:gainsboro">
@@ -96,79 +69,119 @@ $total_reservation_data = $result_total_reservation->fetch_assoc();*/
             <div class="col-md-3">
                 <div class="card text-center bg-primary text-black mb-3">
                     <div class="card-body">
-                        <h3 class="card-title"><?php echo number_format($daily_orders_data['total_revenue']); ?>TL
-                        </h3>
-                        <p class="card-text">Günlük Tutar</p>
+                        <h3 class="card-title"><?php echo $active_tables_data['active_tables']; ?></h3>
+                        <p class="card-text">Anlık Dolu Masa</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="card text-center bg-secondary text-black mb-3">
                     <div class="card-body">
-                        <h3 class="card-title"><?php echo $total_customers_data['total_customers']; ?></h3>
-                        <p class="card-text">Toplam Müşteri</p>
+                        <h3 class="card-title"><?php echo number_format($daily_revenue_data['total_revenue'], 2); ?> TL
+                        </h3>
+                        <p class="card-text">Günlük Hasılat</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="card text-center bg-info text-black mb-3">
                     <div class="card-body">
-                        <h3 class="card-title"><?php echo $total_delivered_data['total_delivered']; ?></h3>
-                        <p class="card-text">Teslim Edilen Sipariş</p>
+                        <h3 class="card-title"><?php echo number_format($monthly_revenue_data['total_revenue'], 2); ?>
+                            TL</h3>
+                        <p class="card-text">Aylık Hasılat</p>
                     </div>
                 </div>
             </div>
-
         </div>
 
-
-    </div>
-    <div class="row" style="margin-top: 20px;">
-        <!-- Latest Order -->
-        <div class="col-md-6">
-            <h3>Son Siparişler</h3>
-            <div class="list-group">
-                <?php
-                $sql_latest_orders = "SELECT * FROM orders ORDER BY created_at DESC LIMIT 5";
-                $result_latest_orders = $conn->query($sql_latest_orders);
-                if ($result_latest_orders && $result_latest_orders->num_rows > 0) {
-                    while ($row = $result_latest_orders->fetch_assoc()) {
-                        echo '<a href="#" class="list-group-item list-group-item-action">';
-                        echo '<small> Order ID: ' . $row['id'] . ' | Table No: ' . $row['table_id'] . ' | Time: ' . $row['created_at'] . '</small>';
-                        echo '</a>';
+        <!-- Son Siparişler -->
+        <div class="row" style="margin-top: 20px;">
+            <!-- Verilen Siparişler -->
+            <div class="col-md-6">
+                <h3>Verilen Siparişler (Bugün)</h3>
+                <div class="list-group">
+                    <?php
+                    $sql_latest_orders = "SELECT o.order_id, t.table_name, DATE_FORMAT(o.created_at, '%H:%i') AS created_at
+                                          FROM orders o
+                                          JOIN tables t ON o.table_id = t.table_id
+                                          WHERE DATE(o.created_at) = '$current_date' AND o.status_number IN (0, 1, 2)
+                                          ORDER BY o.created_at DESC 
+                                          LIMIT 5";
+                    $result_latest_orders = $conn->query($sql_latest_orders);
+                    if ($result_latest_orders && $result_latest_orders->num_rows > 0) {
+                        while ($row = $result_latest_orders->fetch_assoc()) {
+                            echo '<a href="#" class="list-group-item list-group-item-action order-link" data-order-id="' . $row['order_id'] . '">';
+                            echo '<small> Sipariş Numarası: ' . $row['order_id'] . ' | Masa: ' . $row['table_name'] . ' | Saat: ' . $row['created_at'] . '</small>';
+                            echo '</a>';
+                        }
+                    } else {
+                        echo '<div class="alert alert-info">Bugün verilen sipariş yok.</div>';
                     }
-                } else {
-                    echo '<div class="alert alert-info">No recent orders.</div>';
-                }
-                ?>
+                    ?>
+                </div>
+            </div>
+
+            <!-- Tamamlanan Siparişler -->
+            <div class="col-md-6">
+                <h3>Tamamlanan Siparişler</h3>
+                <div class="list-group">
+                    <?php
+                    $sql_completed_orders = "SELECT o.order_id, t.table_name, DATE_FORMAT(o.created_at, '%H:%i') AS created_at 
+                                             FROM orders o
+                                             JOIN tables t ON o.table_id = t.table_id
+                                             WHERE o.status_number = 3
+                                             ORDER BY o.created_at DESC 
+                                             LIMIT 5";
+                    $result_completed_orders = $conn->query($sql_completed_orders);
+                    if ($result_completed_orders && $result_completed_orders->num_rows > 0) {
+                        while ($row = $result_completed_orders->fetch_assoc()) {
+                            echo '<a href="#" class="list-group-item list-group-item-action order-link" data-order-id="' . $row['order_id'] . '">';
+                            echo '<small> Sipariş Numarası: ' . $row['order_id'] . ' | Masa: ' . $row['table_name'] . ' | Saat: ' . $row['created_at'] . '</small>';
+                            echo '</a>';
+                        }
+                    } else {
+                        echo '<div class="alert alert-info">Tamamlanmış sipariş yok.</div>';
+                    }
+                    ?>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- Latest Online Order -->
-        <!-- Latest Completed Orders -->
-        <div class="col-md-6">
-            <h3>Tamamlanan Siparişler</h3>
-            <div class="list-group">
-                <?php
-                $sql_latest_completed_orders = "SELECT * FROM orders WHERE status_number = 'delivered' ORDER BY created_at DESC LIMIT 5";
-                $result_latest_completed_orders = $conn->query($sql_latest_completed_orders);
-                if ($result_latest_completed_orders && $result_latest_completed_orders->num_rows > 0) {
-                    while ($row = $result_latest_completed_orders->fetch_assoc()) {
-                        echo '<a href="#" class="list-group-item list-group-item-action">';
-                        echo '<small>Order No.: (' . $row['id'] . ') | Table No: ' . $row['table_no'] . ' | Time: ' . $row['created_at'] . '</small>';
-                        echo '</a>';
-                    }
-                } else {
-                    echo '<div class="alert alert-info">Son tamamlanmış sipariş yok.</div>';
-                }
-                ?>
+    <!-- Modal -->
+    <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderModalLabel">Sipariş Detayları</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Sipariş detayları burada gösterilecek -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
             </div>
         </div>
-        <div class="col-md-4">
-
-        </div>
-    </div>
     </div>
 </body>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5"></script>
+<script>
+$(document).ready(function() {
+    $('.order-link').click(function() {
+        var orderId = $(this).data('order-id');
+        $.ajax({
+            url: 'get_order_details.php',
+            method: 'POST',
+            data: { order_id: orderId },
+            success: function(response) {
+                $('#orderModal .modal-body').html(response);
+                $('#orderModal').modal('show');
+            }
+        });
+    });
+});
+</script>

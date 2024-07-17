@@ -89,7 +89,7 @@ $months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "A�
                 $sql4 = "SELECT u.username as username, COUNT(o.order_id) as order_count
                         FROM orders o
                         INNER JOIN users u ON o.user_id = u.user_id
-                        WHERE o.status_number = '3' AND YEAR(o.created_at) = YEAR(CURDATE())
+                        WHERE o.status_number = '3' AND DATE(o.created_at) = DATE(CURDATE())
                         GROUP BY u.username";
 
                 $result4 = $conn->query($sql4);
