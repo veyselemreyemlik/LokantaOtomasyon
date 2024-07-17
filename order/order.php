@@ -3,7 +3,7 @@ include '../connection.php';
 include '../sidebar.php';
 
 // Önce tüm masaları alıyoruz
-$sql = "SELECT t.table_id, t.table_name, o.order_id, o.status_number, u.username
+$sql = "SELECT t.table_id, t.table_name, o.order_id, o.status_number, o.payment, u.username
         FROM tables t
         LEFT JOIN orders o ON t.table_id = o.table_id
         LEFT JOIN users u ON o.user_id = u.user_id
@@ -56,9 +56,9 @@ if (count($tables) > 0) {
         
     }
 </style>
-    <div class="col-md-3" ">
-        <div class="card mb-3 <?php echo $card_color; ?>" style="max-width: 18rem; ">
-            <div class="card-body" >
+    <div class="col-md-3">
+        <div class="card mb-3 <?php echo $card_color; ?>" style="max-width: 18rem;">
+            <div class="card-body">
                 <h5 class="card-title">Masa <?php echo htmlspecialchars($table['table_name']); ?></h5>
                 <?php if (isset($table['order_id']) && $table['status_number'] != 3): ?>
                     <h6 class="card-subtitle mb-2 text-body-secondary">Sipariş Numarası: <?php echo $table['order_id']; ?></h6>
@@ -88,9 +88,15 @@ if (count($tables) > 0) {
             <!-- Sipariş detayları burada AJAX ile yüklenecek -->
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            
             <?php if ($table['status_number'] == 2): ?>
+            <input type="number" id="paymentAmount<?php echo $table['order_id']; ?>" placeholder="Ödeme miktarı" class="form-control">
+            <button type="button" class="btn btn-success" onclick="applyDiscount(<?php echo $table['order_id']; ?>, 5)">%5 İndirim</button>
+            <button type="button" class="btn btn-success" onclick="applyDiscount(<?php echo $table['order_id']; ?>, 10)">%10 İndirim</button>
+            <button type="button" class="btn btn-success" onclick="applyDiscount(<?php echo $table['order_id']; ?>, 20)">%20 İndirim</button>
+            
             <button type="button" class="btn btn-danger" onclick="confirmPayment(<?php echo $table['order_id']; ?>)">Ödeme Yapıldı</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
             <?php endif; ?>
           </div>
         </div>
@@ -117,17 +123,35 @@ $(document).ready(function() {
             data: { order_id: orderId },
             success: function(response) {
                 $('#modalBody' + orderId).html(response);
+                var totalPrice = parseFloat($(response).find('.list-group-item:contains("Toplam")').text().replace('Toplam: ', '').replace(' TL', ''));
+                $('#paymentAmount' + orderId).data('total-price', totalPrice);
             }
         });
     });
 });
 
+function applyDiscount(orderId, discountPercentage) {
+    var totalPrice = parseFloat($('#paymentAmount' + orderId).data('total-price'));
+    if (isNaN(totalPrice)) {
+        alert('Geçersiz toplam fiyat');
+        return;
+    }
+    var discountedAmount = totalPrice - (totalPrice * discountPercentage / 100);
+    var roundedAmount = Math.round(discountedAmount); // En yakın tam sayıya yuvarlama
+    $('#paymentAmount' + orderId).val(roundedAmount);
+}
+
 function confirmPayment(orderId) {
+    var paymentAmount = $('#paymentAmount' + orderId).val();
+    if (!paymentAmount) {
+        alert('Lütfen ödeme miktarını giriniz.');
+        return;
+    }
     if (confirm('Ödeme yapıldığından emin misiniz?')) {
         $.ajax({
             url: 'update_order_status.php',
             type: 'POST',
-            data: { order_id: orderId },
+            data: { order_id: orderId, payment: paymentAmount },
             success: function(response) {
                 if (response == 'success') {
                     alert('Ödeme yapıldı ve durum güncellendi.');
