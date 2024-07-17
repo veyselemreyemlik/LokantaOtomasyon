@@ -1,7 +1,7 @@
 <?php
 // Bağlantı dosyasını ve header dosyasını dahil ediyoruz
-include 'connection.php';
-include 'header.php';
+include '../connection.php';
+include '../header.php';
 
 // Oturumu başlatıyoruz
 session_start();

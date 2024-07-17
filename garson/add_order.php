@@ -1,5 +1,5 @@
 <?php
-include 'connection.php';
+include '../connection.php';
 session_start();
 // Check connection
 if ($conn->connect_error) {

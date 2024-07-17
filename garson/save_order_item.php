@@ -1,5 +1,5 @@
 <?php
-include 'connection.php';
+include '../connection.php';
 session_start();
 $order_id = $_POST['order_id'];
 $menu_id = $_POST['menu_id'];

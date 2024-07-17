@@ -1,6 +1,6 @@
 <?php
-include 'connection.php';
-include 'header.php';
+include '../connection.php';
+include '../header.php';
 session_start();
 
 // Fetch table statuses
