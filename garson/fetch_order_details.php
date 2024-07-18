@@ -1,5 +1,5 @@
 <?php
-include 'connection.php';
+include '../connection.php';
 
 if (isset($_GET['table_id'])) {
     $table_id = intval($_GET['table_id']);

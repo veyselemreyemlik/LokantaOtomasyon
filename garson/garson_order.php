@@ -31,7 +31,7 @@ if (count($tables) > 0) {
                     $status_text = 'Sipariş verildi';
                     break;
                 case 1:
-                    $card_color = 'bg-success';
+                    $card_color = 'bg-warning';
                     $status_text = 'Sipariş hazırlandı';
                     break;
                 case 2:
@@ -50,10 +50,8 @@ if (count($tables) > 0) {
 ?>
 <style>
     .card-body {
-        
         height: 180px;
         width: 200px;
-        
     }
 </style>
     <div class="col-md-3">
@@ -66,7 +64,7 @@ if (count($tables) > 0) {
                     <h6 class="card-subtitle mb-2 text-body-secondary">Sipariş Numarası: -</h6>
                 <?php endif; ?>
                 <p class="card-text"><b><?php echo $status_text; ?></b></p>
-                <?php if (isset($table['order_id']) && $table['status_number'] != 3): ?>
+                <?php if (isset($table['order_id']) && $table['status_number'] == 1): ?>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal<?php echo $table['order_id']; ?>">
                       Detaylar
                     </button>
@@ -76,7 +74,7 @@ if (count($tables) > 0) {
     </div>
 
     <!-- Modal -->
-    <?php if (isset($table['order_id']) && $table['status_number'] != 3): ?>
+    <?php if (isset($table['order_id']) && $table['status_number'] == 1): ?>
     <div class="modal fade" id="modal<?php echo $table['order_id']; ?>" tabindex="-1" aria-labelledby="modalLabel<?php echo $table['order_id']; ?>" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -88,16 +86,8 @@ if (count($tables) > 0) {
             <!-- Sipariş detayları burada AJAX ile yüklenecek -->
           </div>
           <div class="modal-footer">
-            
-            <?php if ($table['status_number'] == 2): ?>
-            <input type="number" id="paymentAmount<?php echo $table['order_id']; ?>" placeholder="Ödeme miktarı" class="form-control">
-            <button type="button" class="btn btn-success" onclick="applyDiscount(<?php echo $table['order_id']; ?>, 5)">%5 İndirim</button>
-            <button type="button" class="btn btn-success" onclick="applyDiscount(<?php echo $table['order_id']; ?>, 10)">%10 İndirim</button>
-            <button type="button" class="btn btn-success" onclick="applyDiscount(<?php echo $table['order_id']; ?>, 20)">%20 İndirim</button>
-            
-            <button type="button" class="btn btn-danger" onclick="confirmPayment(<?php echo $table['order_id']; ?>)">Ödeme Yapıldı</button>
+            <button type="button" class="btn btn-success" onclick="confirmDelivery(<?php echo $table['order_id']; ?>)">Teslim Edildi</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-            <?php endif; ?>
           </div>
         </div>
       </div>
@@ -123,38 +113,20 @@ $(document).ready(function() {
             data: { order_id: orderId },
             success: function(response) {
                 $('#modalBody' + orderId).html(response);
-                var totalPrice = parseFloat($(response).find('.list-group-item:contains("Toplam")').text().replace('Toplam: ', '').replace(' TL', ''));
-                $('#paymentAmount' + orderId).data('total-price', totalPrice);
             }
         });
     });
 });
 
-function applyDiscount(orderId, discountPercentage) {
-    var totalPrice = parseFloat($('#paymentAmount' + orderId).data('total-price'));
-    if (isNaN(totalPrice)) {
-        alert('Geçersiz toplam fiyat');
-        return;
-    }
-    var discountedAmount = totalPrice - (totalPrice * discountPercentage / 100);
-    var roundedAmount = Math.round(discountedAmount); // En yakın tam sayıya yuvarlama
-    $('#paymentAmount' + orderId).val(roundedAmount);
-}
-
-function confirmPayment(orderId) {
-    var paymentAmount = $('#paymentAmount' + orderId).val();
-    if (!paymentAmount) {
-        alert('Lütfen ödeme miktarını giriniz.');
-        return;
-    }
-    if (confirm('Ödeme yapıldığından emin misiniz?')) {
+function confirmDelivery(orderId) {
+    if (confirm('Siparişin teslim edildiğinden emin misiniz?')) {
         $.ajax({
             url: 'update_order_status.php',
             type: 'POST',
-            data: { order_id: orderId, payment: paymentAmount },
+            data: { order_id: orderId, status_number: 2 },
             success: function(response) {
                 if (response == 'success') {
-                    alert('Ödeme yapıldı ve durum güncellendi.');
+                    alert('Sipariş teslim edildi ve durum güncellendi.');
                     location.reload(); // Sayfayı yenileyerek güncel durumu göster
                 } else {
                     alert('Hata: ' + response);
