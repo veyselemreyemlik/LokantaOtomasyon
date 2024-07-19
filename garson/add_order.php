@@ -49,7 +49,7 @@ $conn->close();
         <label for="menu_id">Ürün:</label>
         <select name="menu_id" id="menu_id">
             <?php foreach ($menu_items as $item): ?>
-                <option value="<?php echo $item['menu_id']; ?>"><?php echo $item['product_name']; ?></option>
+                <option value="<?php echo $item['menu_id']; ?>"><?php echo $item['menu_name']; ?></option>
             <?php endforeach; ?>
         </select><br><br>
         <label for="piece">Adet:</label>

@@ -13,7 +13,7 @@ $table_id = isset($_GET['table_id']) ? $_GET['table_id'] : null;
 if ($table_id) {
     $order_details = [];
     // SQL sorgusu: Sadece belirli 'table_id' için sipariş detaylarını çekiyoruz
-    $sql = "SELECT o.order_id, o.created_at, u.username, mi.product_name, od.piece, od.statement
+    $sql = "SELECT o.order_id, o.created_at, u.username, mi.menu_name, od.piece, od.statement
             FROM orders o
             JOIN users u ON o.user_id = u.user_id
             JOIN order_details od ON o.order_id = od.order_id
@@ -137,7 +137,7 @@ if ($table_id) {
                     </div>
                     <div class="form-row">
                         <label>Ürün</label>
-                        <input type="text" class="form-control" value="<?php echo $detail['product_name']; ?>" readonly>
+                        <input type="text" class="form-control" value="<?php echo $detail['menu_name']; ?>" readonly>
                     </div>
                     <div class="form-row">
                         <label>Adet</label>

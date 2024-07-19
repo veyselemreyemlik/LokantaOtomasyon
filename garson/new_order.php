@@ -110,7 +110,7 @@ $conn->close();
             <label for="menu_id">Ürün:</label>
             <select name="menu_id" id="menu_id">
                 <?php foreach ($menu_items as $item): ?>
-                    <option value="<?php echo $item['menu_id']; ?>"><?php echo $item['product_name']; ?></option>
+                    <option value="<?php echo $item['menu_id']; ?>"><?php echo $item['menu_name']; ?></option>
                 <?php endforeach; ?>
             </select>
             <label for="piece">Adet:</label>
@@ -143,7 +143,7 @@ $conn->close();
             const productName = menuIdElement.options[menuIdElement.selectedIndex].text;
 
             if (piece && menuId) {
-                orderItems.push({ menu_id: menuId, piece: piece, statement: statement, product_name: productName });
+                orderItems.push({ menu_id: menuId, piece: piece, statement: statement, menu_name: productName });
 
                 const orderItemsContainer = document.getElementById('orderItems');
                 const itemDiv = document.createElement('div');
