@@ -129,7 +129,7 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
                     $sql_completed_orders = "SELECT o.order_id, t.table_name, DATE_FORMAT(o.created_at, '%H:%i') AS created_at 
                                              FROM orders o
                                              JOIN tables t ON o.table_id = t.table_id
-                                             WHERE o.status_number = 3
+                                             WHERE o.status_number = 3 AND DATE(o.created_at) = '$current_date'
                                              ORDER BY o.created_at DESC 
                                              LIMIT 5";
                     $result_completed_orders = $conn->query($sql_completed_orders);
