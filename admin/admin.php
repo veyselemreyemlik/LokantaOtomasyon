@@ -163,55 +163,53 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
         <div class="row justify-content-center">
             <div class="col-md-6 text-center">
                 <form id="closeCashForm" action="close_cash.php" method="post">
-                    <button type="submit" class="btn btn-red btn-lg">Kasa Kapat</button>
+                    <button type="button" class="btn btn-red btn-lg" onclick="confirmCloseCash()">Kasa Kapat</button>
                 </form>
             </div>
         </div>
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="orderModalLabel">Sipariş Detayları</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Sipariş detayları burada gösterilecek -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+        <!-- Modal -->
+        <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="orderModalLabel">Sipariş Detayları</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Sipariş detayları burada gösterilecek -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</body>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5"></script>
-<script>
-    function confirmCloseCash() {
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5"></script>
+        <script>
+        function confirmCloseCash() {
             if (confirm("Kasa kapatmak istediğinizden emin misiniz?")) {
                 document.getElementById('closeCashForm').submit();
             }
         }
-</script>
-<script>
-    
-$(document).ready(function() {
-    $('.order-link').click(function() {
-        var orderId = $(this).data('order-id');
-        $.ajax({
-            url: 'get_order_details.php',
-            method: 'POST',
-            data: {
-                order_id: orderId
-            },
-            success: function(response) {
-                $('#orderModal .modal-body').html(response);
-                $('#orderModal').modal('show');
-            }
+
+        $(document).ready(function() {
+            $('.order-link').click(function() {
+                var orderId = $(this).data('order-id');
+                $.ajax({
+                    url: 'get_order_details.php',
+                    method: 'POST',
+                    data: {
+                        order_id: orderId
+                    },
+                    success: function(response) {
+                        $('#orderModal .modal-body').html(response);
+                        $('#orderModal').modal('show');
+                    }
+                });
+            });
         });
-    });
-});
-</script>
+        </script>
+</body>

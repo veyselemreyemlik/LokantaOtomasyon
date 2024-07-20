@@ -86,6 +86,28 @@ $sheet->setCellValue('G'.$row, $card_total);
 $writer = new Xlsx($spreadsheet);
 $writer->save($filename);
 
+$file = 'gunluk_rapor.xlsx';
+// Dosya mevcut mu kontrol edin
+if (file_exists($file)) {
+    // Spreadsheet nesnesi oluşturun
+    $spreadsheet = IOFactory::load($file);
+
+    // Dosya ismi
+    $fileName = basename($file);
+
+    // Header'ları ayarlayın
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment; filename="' . $fileName . '"');
+    header('Cache-Control: max-age=0');
+
+    // Writer oluşturun ve çıktı verin
+    $writer = new Xlsx($spreadsheet);
+    $writer->save('php://output');
+    exit;
+} else {
+    echo "Dosya bulunamadı.";
+}
+
 header("Location: admin.php");
 
 // Veritabanı bağlantısını kapatma
