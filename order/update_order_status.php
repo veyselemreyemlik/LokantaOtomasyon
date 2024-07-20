@@ -1,23 +1,23 @@
 <?php
 include '../connection.php';
 
-if (isset($_POST['order_id']) && isset($_POST['payment'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $order_id = $_POST['order_id'];
     $payment = $_POST['payment'];
+    $payment_type = $_POST['payment_type'];
 
-    // Order statusunu güncelle ve ödeme miktarını kaydet
-    $sql = "UPDATE orders SET status_number = 3, payment = ? WHERE order_id = ?";
+    // Veritabanında ödeme miktarını ve ödeme türünü güncelleme sorgusu
+    $sql = "UPDATE orders SET status_number =3, payment = ?, payment_type = ? WHERE order_id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("di", $payment, $order_id);
+    $stmt->bind_param('dii', $payment, $payment_type, $order_id);
+
     if ($stmt->execute()) {
         echo 'success';
     } else {
-        echo 'error: ' . $stmt->error;
+        echo 'error';
     }
-    $stmt->close();
-} else {
-    echo 'error: missing parameters';
-}
 
-$conn->close();
+    $stmt->close();
+    $conn->close();
+}
 ?>
