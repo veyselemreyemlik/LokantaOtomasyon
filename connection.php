@@ -2,13 +2,12 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "lokantaotomasyon";
+$dbname = "lokantaOtomasyon";
 
-// Bağlantı oluştur
+// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Bağlantıyı kontrol et
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-?>
