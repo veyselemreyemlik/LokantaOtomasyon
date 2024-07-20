@@ -54,6 +54,18 @@ if (!$result_monthly_revenue) {
 }
 $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
 ?>
+<style>
+.btn-red {
+    background-color: red;
+    border-color: red;
+    color: white;
+}
+
+.btn-red:hover {
+    background-color: darkred;
+    border-color: darkred;
+}
+</style>
 
 <body style="background-color:gainsboro">
     <div class="container-fluid mt-6 bg-blue">
@@ -147,7 +159,15 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
             </div>
         </div>
     </div>
-
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+                <form id="closeCashForm" action="close_cash.php" method="post">
+                    <button type="submit" class="btn btn-red btn-lg">Kasa Kapat</button>
+                </form>
+            </div>
+        </div>
+    </div>
     <!-- Modal -->
     <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -170,13 +190,23 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5"></script>
 <script>
+    function confirmCloseCash() {
+            if (confirm("Kasa kapatmak istediğinizden emin misiniz?")) {
+                document.getElementById('closeCashForm').submit();
+            }
+        }
+</script>
+<script>
+    
 $(document).ready(function() {
     $('.order-link').click(function() {
         var orderId = $(this).data('order-id');
         $.ajax({
             url: 'get_order_details.php',
             method: 'POST',
-            data: { order_id: orderId },
+            data: {
+                order_id: orderId
+            },
             success: function(response) {
                 $('#orderModal .modal-body').html(response);
                 $('#orderModal').modal('show');
