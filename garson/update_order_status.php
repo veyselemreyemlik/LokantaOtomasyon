@@ -7,17 +7,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $status_number = intval($_POST['status_number']);
 
         // Sipariş durumunu güncelleme
-        $sql = "UPDATE orders SET status_number = ? WHERE order_id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ii", $status_number, $order_id);
+        $sql_update_order = "UPDATE orders SET status_number = ? WHERE order_id = ?";
+        $stmt_update_order = $conn->prepare($sql_update_order);
+        $stmt_update_order->bind_param("ii", $status_number, $order_id);
 
-        if ($stmt->execute()) {
+        // Sipariş detaylarını güncelleme
+        $sql_update_details = "UPDATE order_details SET status_number = 1 WHERE order_id = ?";
+        $stmt_update_details = $conn->prepare($sql_update_details);
+        $stmt_update_details->bind_param("i", $order_id);
+
+        if ($stmt_update_order->execute() && $stmt_update_details->execute()) {
             echo 'success';
         } else {
             echo 'error';
         }
 
-        $stmt->close();
+        $stmt_update_order->close();
+        $stmt_update_details->close();
     } else {
         echo 'missing_parameters';
     }

@@ -6,10 +6,8 @@ $current_year = date("Y");
 $current_date = date("Y-m-d");
 
 // Satışları aylara göre almak için SQL sorgusu
-$sql = "SELECT MONTH(o.created_at) as month, SUM(mi.price * od.piece) as total_revenue
+$sql = "SELECT MONTH(o.created_at) as month, SUM(o.payment) as total_revenue
         FROM orders o
-        INNER JOIN order_details od ON o.order_id = od.order_id
-        INNER JOIN menu_items mi ON od.menu_id = mi.menu_id
         WHERE o.status_number = '3' AND YEAR(o.created_at) = YEAR(CURDATE())
         GROUP BY MONTH(o.created_at)";
 
@@ -30,17 +28,18 @@ $sql2 = "SELECT mi.menu_name as menu_item, SUM(od.piece) as total_sold
         INNER JOIN order_details od ON o.order_id = od.order_id
         INNER JOIN menu_items mi ON od.menu_id = mi.menu_id
         WHERE o.status_number = '3' AND YEAR(o.created_at) = YEAR(CURDATE())
-        GROUP BY mi.menu_name";
+        GROUP BY mi.menu_name
+        ORDER BY total_sold DESC";
+
 
 $result2 = $conn->query($sql2);
 
 // Satışları saatlere göre almak için SQL sorgusu
-$sql3 = "SELECT HOUR(o.created_at) as hour, SUM(mi.price * od.piece) as total_revenue
+$sql3 = "SELECT HOUR(o.created_at) as hour, SUM(o.payment) as total_revenue
         FROM orders o
-        INNER JOIN order_details od ON o.order_id = od.order_id
-        INNER JOIN menu_items mi ON od.menu_id = mi.menu_id
         WHERE o.status_number = '3' AND DATE(o.created_at) = DATE(CURDATE())
         GROUP BY HOUR(o.created_at)";
+
 
 $result3 = $conn->query($sql3);
 
@@ -60,10 +59,11 @@ $months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "A�
 ?>
 
 <style>
-    .col-md-7, .col-md-4 {
-        margin-bottom: 50px;
-        margin-top: 50px;
-    }
+.col-md-7,
+.col-md-4 {
+    margin-bottom: 50px;
+    margin-top: 50px;
+}
 </style>
 
 <div class="row">
@@ -86,11 +86,12 @@ $months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "A�
                 </thead>
                 <tbody>
                     <?php
-                $sql4 = "SELECT u.username as username, COUNT(o.order_id) as order_count
-                        FROM orders o
-                        INNER JOIN users u ON o.user_id = u.user_id
-                        WHERE o.status_number = '3' AND DATE(o.created_at) = DATE(CURDATE())
-                        GROUP BY u.username";
+               $sql4 = "SELECT u.username as username, COUNT(o.order_id) as order_count
+               FROM orders o
+               INNER JOIN users u ON o.user_id = u.user_id
+               WHERE o.status_number = '3' AND DATE(o.created_at) = DATE(CURDATE())
+               GROUP BY u.username";
+       
 
                 $result4 = $conn->query($sql4);
 

@@ -1,73 +1,72 @@
 <?php
 session_start(); // Session başlatma
 include 'connection.php'; // Veritabanı bağlantısı
+
 // Eğer kullanıcı zaten giriş yapmışsa ve place_id tanımlıysa yönlendir
 if (isset($_SESSION['user_id'])) {
-    // Kullanıcının place_id'sini al
     $user_id = $_SESSION['user_id'];
-    $sql = "SELECT place_id FROM users WHERE id = $user_id";
+    $sql = "SELECT place_id FROM users WHERE user_id = $user_id";
     $result = $conn->query($sql);
 
     if ($result && $result->num_rows == 1) {
         $user = $result->fetch_assoc();
-
-        // Kullanıcının place_id'sine göre yönlendirme yap
         switch ($user['place_id']) {
             case 1:
             case 2:
             case 3:
-                header("Location: place.php?place_id=" . $user['place_id']); // Place sayfasına yönlendir
+                header("Location: place.php?place_id=" . $user['place_id']);
                 exit;
             case 4:
-                header("Location: admin.php"); // Admin sayfasına yönlendir
+                header("Location: admin/admin.php");
                 exit;
             case 5:
-                header("Location: garson.php"); // Garson sayfasına yönlendir
+                header("Location: garson/garson_order.php");
                 exit;
             default:
-                header("Location: index.php"); // Varsayılan olarak ana sayfaya yönlendir
+                header("Location: index.php");
                 exit;
         }
     }
 }
 
-
 // Form gönderildiğinde
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = $conn->real_escape_string($_POST['username']);
+    $password = $conn->real_escape_string($_POST['password']);
 
-    // Kullanıcı adı ve şifre ile sorgu yap
-    $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+    $sql = "SELECT * FROM users WHERE username = '$username'";
     $result = $conn->query($sql);
 
     if ($result && $result->num_rows == 1) {
         $user = $result->fetch_assoc();
-        $_SESSION['user_id'] = $user['id']; // Oturumda kullanıcı ID'sini sakla
 
-        // Kullanıcının place_id'sini kontrol et
-        switch ($user['place_id']) {
-            case 1:
-            case 2:
-            case 3:
-                header("Location: place.php?place_id=" . $user['place_id']); // Place sayfasına yönlendir
-                break;
-            case 4:
-                header("Location: admin.php"); // Admin sayfasına yönlendir
-                break;
-            case 5:
-                header("Location: garson.php"); // Garson sayfasına yönlendir
-                break;
-            default:
-                header("Location: index.php"); // Varsayılan olarak ana sayfaya yönlendir
-                break;
+        if ($password === $user['password']) {
+            $_SESSION['user_id'] = $user['user_id'];
+            switch ($user['place_id']) {
+                case 1:
+                case 2:
+                case 3:
+                    header("Location: place.php?place_id=" . $user['place_id']);
+                    exit;
+                case 4:
+                    header("Location: admin/admin.php");
+                    exit;
+                case 5:
+                    header("Location: garson/garson_order.php");
+                    exit;
+                default:
+                    header("Location: index.php");
+                    exit;
+            }
+        } else {
+            $error_message = "Kullanıcı adı veya şifre yanlış.";
         }
-        exit;
     } else {
         $error_message = "Kullanıcı adı veya şifre yanlış.";
     }
 }
 
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -108,5 +107,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </body>
 
 </html>
-
-<?php include 'footer.php'; ?>

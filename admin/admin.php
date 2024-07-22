@@ -3,6 +3,10 @@ include '../connection.php';
 include '../sidebar.php';
 
 session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login.php"); // Kullanıcı giriş yapmamışsa login sayfasına yönlendir
+    exit();
+}
 
 // Günlük sipariş sayısı
 $current_date = date('Y-m-d');
@@ -18,8 +22,9 @@ $today_orders_data = $result_today_orders->fetch_assoc();
 
 // Anlık dolu masa sayısı (status_number 0, 1 veya 2 olan masalar)
 $sql_active_tables = "SELECT COUNT(DISTINCT table_id) AS active_tables 
-                      FROM orders 
-                      WHERE status_number IN (0, 1, 2)";
+                      FROM orders o
+                      WHERE o.status_number IN (0, 1, 2) AND DATE(o.created_at) = '$current_date'";
+
 $result_active_tables = $conn->query($sql_active_tables);
 
 if (!$result_active_tables) {
@@ -28,11 +33,11 @@ if (!$result_active_tables) {
 $active_tables_data = $result_active_tables->fetch_assoc();
 
 // Günlük hasılat
-$sql_daily_revenue = "SELECT SUM(mi.price * od.piece) AS total_revenue 
+$sql_daily_revenue = "SELECT SUM(o.payment) AS total_revenue 
                       FROM orders o
-                      JOIN order_details od ON o.order_id = od.order_id
-                      JOIN menu_items mi ON od.menu_id = mi.menu_id
-                      WHERE DATE(o.created_at) = '$current_date'";
+                      WHERE o.status_number = 3 
+                        AND DATE(o.created_at) = '$current_date'";
+
 $result_daily_revenue = $conn->query($sql_daily_revenue);
 
 if (!$result_daily_revenue) {
@@ -42,11 +47,12 @@ $daily_revenue_data = $result_daily_revenue->fetch_assoc();
 
 // Aylık hasılat
 $current_month = date('Y-m');
-$sql_monthly_revenue = "SELECT SUM(mi.price * od.piece) AS total_revenue 
+$sql_monthly_revenue = "SELECT SUM(o.payment) AS total_revenue 
                         FROM orders o
-                        JOIN order_details od ON o.order_id = od.order_id
-                        JOIN menu_items mi ON od.menu_id = mi.menu_id
-                        WHERE DATE_FORMAT(o.created_at, '%Y-%m') = '$current_month'";
+                        WHERE o.status_number = 3 
+                          AND DATE_FORMAT(o.created_at, '%Y-%m') = '$current_month'";
+
+
 $result_monthly_revenue = $conn->query($sql_monthly_revenue);
 
 if (!$result_monthly_revenue) {
@@ -54,6 +60,8 @@ if (!$result_monthly_revenue) {
 }
 $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
 ?>
+<!-- HTML ve CSS kodları devam ediyor... -->
+
 <style>
 .btn-red {
     background-color: red;
@@ -180,11 +188,11 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                        <button type="button" class="btn btn-danger" onclick="closeTable()">Masa Kapat</button>
                     </div>
                 </div>
             </div>
         </div>
-
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5"></script>
@@ -206,10 +214,40 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
                     },
                     success: function(response) {
                         $('#orderModal .modal-body').html(response);
+                        $('#orderModal').data('order-id',
+                        orderId); // order-id'yi modal'a set ediyoruz
+
+                        // Sipariş durumu kontrolü
+                        var statusNumber = $('#order_status_number').val();
+                        if (statusNumber == 3) { // Eğer sipariş tamamlanmışsa
+                            $('#orderModal .btn-danger')
+                        .hide(); // "Masa Kapat" butonunu gizle
+                        } else {
+                            $('#orderModal .btn-danger')
+                        .show(); // Diğer durumda butonu göster
+                        }
+
                         $('#orderModal').modal('show');
                     }
                 });
             });
         });
+
+
+        function closeTable() {
+            var orderId = $('#orderModal').data('order-id');
+            $.ajax({
+                url: 'close_table.php',
+                method: 'POST',
+                data: {
+                    order_id: orderId
+                },
+                success: function(response) {
+                    alert(response);
+                    $('#orderModal').modal('hide');
+                    location.reload(); // Sayfayı yeniden yükleyerek güncellemeleri göster
+                }
+            });
+        }
         </script>
 </body>

@@ -4,7 +4,7 @@ include '../connection.php';
 if (isset($_POST['order_id'])) {
     $order_id = $_POST['order_id'];
 
-    $sql_order_details = "SELECT o.order_id, t.table_name, o.created_at, u.username AS waiter_name, od.piece, mi.menu_name AS menu_item, mi.price 
+    $sql_order_details = "SELECT o.order_id, t.table_name, o.created_at, u.username AS waiter_name, od.piece, mi.menu_name AS menu_item, mi.price, o.status_number
                           FROM orders o
                           JOIN tables t ON o.table_id = t.table_id
                           JOIN users u ON o.user_id = u.user_id
@@ -27,6 +27,7 @@ if (isset($_POST['order_id'])) {
             echo '<li>' . $row['menu_item'] . ' - ' . $row['piece'] . ' Adet - ' . number_format($row['price'], 2) . ' TL</li>';
         }
         echo '</ul>';
+        echo '<input type="hidden" id="order_status_number" value="' . $order_details['status_number'] . '">';
     } else {
         echo '<p>Sipariş detayları bulunamadı.</p>';
     }

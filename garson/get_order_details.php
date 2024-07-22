@@ -23,11 +23,12 @@ if (isset($_GET['order_id'])) {
         }
 
         // Sipariş detaylarını alıyoruz
-        $sql = "SELECT o.order_id, od.menu_id, mi.menu_name, od.piece, mi.price, (od.piece * mi.price) as total_price
-                FROM orders o
-                JOIN order_details od ON o.order_id = od.order_id
-                JOIN menu_items mi ON od.menu_id = mi.menu_id
-                WHERE o.order_id = $order_id";
+        $sql = "SELECT o.order_id, od.menu_id, mi.menu_name, od.piece, od.statement, mi.price, (od.piece * mi.price) as total_price
+        FROM orders o
+        JOIN order_details od ON o.order_id = od.order_id
+        JOIN menu_items mi ON od.menu_id = mi.menu_id
+        WHERE od.status_number=0 AND o.order_id = $order_id";
+
 
         $result = $conn->query($sql);
 
@@ -38,7 +39,8 @@ if (isset($_GET['order_id'])) {
             $total = 0;
             while($row = $result->fetch_assoc()) {
                 echo '<li class="list-group-item">';
-                echo '<b>' . $row['piece'] . '</b> tane <b>' . htmlspecialchars($row['menu_name']) . '</b> - Fiyat: <b>' . number_format($row['total_price'], 2) . ' TL </b>';
+                echo htmlspecialchars($row['piece']) . ' Adet ' . htmlspecialchars($row['menu_name']) . ' Not: <b>' . htmlspecialchars($row['statement']) . '</b>';
+
                 echo '</li>';
                 $total += $row['total_price'];
             }

@@ -68,7 +68,7 @@ if (file_exists($filename)) {
     $sheet->setCellValue('B1', 'Toplam Sipariş');
     $sheet->setCellValue('C1', 'Toplam Hasılat');
     $sheet->setCellValue('D1', 'Gerçek Hasılat');
-    $sheet->setCellValue('E1', 'İndirim');
+    $sheet->setCellValue('E1', 'Yapılan İndirim');
     $sheet->setCellValue('F1', 'Nakit Toplam');
     $sheet->setCellValue('G1', 'Kart Toplam');
 }

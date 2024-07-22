@@ -92,7 +92,12 @@ if (count($tables) > 0) {
             <div class="modal-body" id="modalBody<?php echo $table['order_id']; ?>">
                 <!-- Sipariş detayları burada AJAX ile yüklenecek -->
             </div>
+            
+
+
             <div class="modal-footer" style="justify-content: center;">
+            <?php
+            if($table['status_number'] == 2){   ?>
                 <div class="row">
                     <div class="col-md-7">
                         <input type="number" id="paymentAmount<?php echo $table['order_id']; ?>"
@@ -121,7 +126,7 @@ if (count($tables) > 0) {
                 <button type="button" class="btn btn-danger"
                     onclick="confirmPayment(<?php echo $table['order_id']; ?>)">Ödeme Yapıldı</button>
 
-                <?php endif; ?>
+                <?php endif; } ?>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
             </div>
         </div>
@@ -174,24 +179,23 @@ function confirmPayment(orderId) {
         return;
     }
 
-    if (confirm('Ödeme yapıldığından emin misiniz?')) {
-        $.ajax({
-            url: 'update_order_status.php',
-            type: 'POST',
-            data: {
-                order_id: orderId,
-                payment: paymentAmount,
-                payment_type: paymentType
-            },
-            success: function(response) {
-                if (response == 'success') {
-                    alert('Ödeme yapıldı ve durum güncellendi.');
-                    location.reload(); // Sayfayı yenileyerek güncel durumu göster
-                } else {
-                    alert('Hata: ' + response);
-                }
-            }
-        });
+    $.ajax({
+    url: 'update_order_status.php',
+    type: 'POST',
+    data: {
+        order_id: orderId,
+        payment: paymentAmount,
+        payment_type: paymentType
+    },
+    success: function(response) {
+        if (response == 'success') {
+            alert('Ödeme yapıldı.');
+            location.reload(); // Sayfayı yenileyerek güncel durumu göster
+        } else {
+            alert('Hata: ' + response);
+        }
     }
+});
+
 }
 </script>
