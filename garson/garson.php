@@ -1,22 +1,57 @@
 <?php
 include '../connection.php';
-include '../header.php';
 session_start();
 
-// Fetch table statuses
-$tables = [];
-$sql = "SELECT t.table_id, IFNULL(o.status_number, 0) AS status
+// Önce tüm masaları alıyoruz
+$sql = "SELECT t.table_id, t.table_name, o.order_id, o.status_number, o.payment, u.username,
+               SUM(od.piece * mi.price) as total_price
         FROM tables t
-        LEFT JOIN orders o ON t.table_id = o.table_id AND o.status_number = 1";
+        LEFT JOIN orders o ON t.table_id = o.table_id
+        LEFT JOIN order_details od ON o.order_id = od.order_id
+        LEFT JOIN menu_items mi ON od.menu_id = mi.menu_id
+        LEFT JOIN users u ON o.user_id = u.user_id
+        GROUP BY t.table_id, o.order_id, o.status_number, o.payment, u.username
+        ORDER BY t.table_name, o.created_at DESC";
+
 $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $tables[] = $row;
+$tables = [];
+while($row = $result->fetch_assoc()) {
+    if (!isset($tables[$row['table_id']])) {
+        $tables[$row['table_id']] = $row;
     }
 }
 
-$conn->close();
+if (count($tables) > 0) {
+    echo '<div class="row">';
+    foreach($tables as $table) {
+        $card_color = 'bg-secondary';
+        $status_text = 'Masa boş';
+
+        if (isset($table['status_number'])) {
+            switch ($table['status_number']) {
+                case 0:
+                    $card_color = 'bg-success';
+                    $status_text = 'Sipariş verildi';
+                    break;
+                case 1:
+                    $card_color = 'bg-success';
+                    $status_text = 'Sipariş hazırlandı';
+                    break;
+                case 2:
+                    $card_color = 'bg-info';
+                    $status_text = 'Ödeme bekliyor..';
+                    break;
+                case 3:
+                    $card_color = 'bg-secondary';
+                    $status_text = 'Masa boş';
+                    break;
+                default:
+                    $card_color = '';
+                    $status_text = 'Durum bilinmiyor';
+            }
+        }
+
 ?>
 
 <!DOCTYPE html>
@@ -117,6 +152,11 @@ $conn->close();
             }
         }
     </script>
+
+
+
+
+
 </body>
 
 </html>
