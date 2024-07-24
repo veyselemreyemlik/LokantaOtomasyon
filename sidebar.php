@@ -13,6 +13,8 @@
     <style>
         body {
             display: flex;
+
+
         }
 
         .sidebar {
@@ -21,26 +23,28 @@
             position: fixed;
             top: 0;
             left: 0;
-            background-color: #343a40;
-            padding-top: 20px;
+            background-color: #27374D;
+            padding-top: 40px;
+            font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
 
         .sidebar a {
             padding: 15px 20px;
             text-decoration: none;
             font-size: 18px;
-            color: #ddd;
+            color: #DDE6ED;
             display: block;
         }
 
         .sidebar a:hover {
-            background-color: #575d63;
-            color: #fff;
+            background-color: #526D82;
+            color: #A5D7E8;
+            border: #27374D;
         }
 
         .sidebar .active {
             background-color: #007bff;
-            color: #fff;
+            color: #A5D7E8;
         }
 
         .sidebar i {
@@ -53,6 +57,29 @@
             padding: 20px;
             width: 100%;
         }
+
+        logo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            margin-left: 50px;
+            margin-right: auto;
+            margin-top: 50px;
+        }
+
+        .sidebar .logo {
+            width: 50%;
+            /* Sidebar'ın genişliğine göre ayarlanabilir */
+            height: auto;
+            /* Otomatik olarak orantıyı korur */
+            margin-bottom: 20px;
+            /* Logonun altında boşluk bırakır */
+            margin-left: 50px;
+            margin-right: auto;
+        }
     </style>
 </head>
 
@@ -62,12 +89,15 @@
         </script>
 
     <div class="sidebar">
+        <div class="logo ">
+            <img src="../image/logo.png" alt="Logo" class="logo">
+        </div>
         <a href="../admin/admin.php"><i class="fas fa-home"></i> Ana Sayfa</a>
         <a href="../menu/menu.php"><i class="fas fa-utensils"></i> Menü </a>
         <a href="../table/table.php"><i class="fas fa-table"></i> Masalar</a>
         <a href="../user/users.php"><i class="fas fa-users"></i> Kullanıcılar</a>
         <a href="../order/order.php"><i class="fas fa-receipt"></i> Siparişler</a>
         <a href="../statistics/statistics.php"><i class="fas fa-cog"></i> İstatislik</a>
-        
+
     </div>
     <div class="content">

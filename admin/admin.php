@@ -63,23 +63,103 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
 <!-- HTML ve CSS kodları devam ediyor... -->
 
 <style>
-.btn-red {
-    background-color: red;
-    border-color: red;
-    color: white;
-}
+    body {
+        background-color: #DDDDDD;
+        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: indigo;
+    }
 
-.btn-red:hover {
-    background-color: darkred;
-    border-color: darkred;
-}
+    .btn-red {
+        background-color: #19376D;
+        border-color: #576CBC;
+        color: whitesmoke;
+        font-weight: bold;
+
+    }
+
+    .btn-red:hover {
+        background-color: #576CBC;
+        border-color: #19376D;
+        color: whitesmoke;
+        font-weight: bold;
+
+    }
+
+    .col-md-6 {
+        margin-top: 30px;
+    }
+
+    .h3desing {
+        font-family: "Alegreya Sans", sans-serif;
+        font: 1.5em sans-serif;
+        color: #0B2447;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .row {
+        margin-top: 20px;
+    }
+
+    .row_desing {
+        background-color: #B4B4B8;
+        border-radius: 5px;
+    }
+
+    .bg-color1 {
+        background-color: #79155B;
+        color: whitesmoke;
+        font-weight: bold;
+    }
+
+    .bg-color1:hover {
+        background-color: #C23373;
+        color: whitesmoke;
+        font-weight: bold;
+    }
+
+    .bg-color2 {
+        background-color: #19376D;
+        color: whitesmoke;
+        font-weight: bold;
+    }
+
+    .bg-color2:hover {
+        background-color: #576CBC;
+        color: whitesmoke;
+        font-weight: bold;
+    }
+
+    .bg-color3 {
+        background-color: #618264;
+        color: whitesmoke;
+        font-weight: bold;
+    }
+
+    .bg-color3:hover {
+        background-color: #79AC78;
+        color: whitesmoke;
+        font-weight: bold;
+    }
+
+    .bg-color4 {
+        background-color: #6527BE;
+        color: whitesmoke;
+        font-weight: bold;
+    }
+
+    .bg-color4:hover {
+        background-color: #9681EB;
+        color: whitesmoke;
+        font-weight: bold;
+    }
 </style>
 
-<body style="background-color:gainsboro">
+<body>
     <div class="container-fluid mt-6 bg-blue">
         <div class="row">
             <div class="col-md-3">
-                <div class="card text-center bg-success text-black mb-3">
+                <div class="card text-center bg-color1 mb-3">
                     <div class="card-body">
                         <h3 class="card-title"><?php echo $today_orders_data['today_orders']; ?></h3>
                         <p class="card-text">Bugünkü Siparişler</p>
@@ -87,7 +167,7 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-center bg-primary text-black mb-3">
+                <div class="card text-center bg-color2 mb-3">
                     <div class="card-body">
                         <h3 class="card-title"><?php echo $active_tables_data['active_tables']; ?></h3>
                         <p class="card-text">Anlık Dolu Masa</p>
@@ -95,7 +175,7 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-center bg-secondary text-black mb-3">
+                <div class="card text-center bg-color3  mb-3">
                     <div class="card-body">
                         <h3 class="card-title"><?php echo number_format($daily_revenue_data['total_revenue'], 2); ?> TL
                         </h3>
@@ -104,7 +184,7 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-center bg-info text-black mb-3">
+                <div class="card text-center bg-color4  mb-3">
                     <div class="card-body">
                         <h3 class="card-title"><?php echo number_format($monthly_revenue_data['total_revenue'], 2); ?>
                             TL</h3>
@@ -115,10 +195,10 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
         </div>
 
         <!-- Son Siparişler -->
-        <div class="row" style="margin-top: 20px;">
+        <div class="row row_desing" style="margin-top: 20px;">
             <!-- Verilen Siparişler -->
-            <div class="col-md-6">
-                <h3>Verilen Siparişler (Bugün)</h3>
+            <div class="col-md-6 div-desing">
+                <h3 class="h3desing">Bugün Verilen Siparişler</h3>
                 <div class="list-group">
                     <?php
                     $sql_latest_orders = "SELECT o.order_id, t.table_name, DATE_FORMAT(o.created_at, '%H:%i') AS created_at
@@ -143,7 +223,7 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
 
             <!-- Tamamlanan Siparişler -->
             <div class="col-md-6">
-                <h3>Tamamlanan Siparişler</h3>
+                <h3 class="h3desing">Tamamlanan Siparişler</h3>
                 <div class="list-group">
                     <?php
                     $sql_completed_orders = "SELECT o.order_id, t.table_name, DATE_FORMAT(o.created_at, '%H:%i') AS created_at 
@@ -197,57 +277,57 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5"></script>
         <script>
-        function confirmCloseCash() {
-            if (confirm("Kasa kapatmak istediğinizden emin misiniz?")) {
-                document.getElementById('closeCashForm').submit();
+            function confirmCloseCash() {
+                if (confirm("Kasa kapatmak istediğinizden emin misiniz?")) {
+                    document.getElementById('closeCashForm').submit();
+                }
             }
-        }
 
-        $(document).ready(function() {
-            $('.order-link').click(function() {
-                var orderId = $(this).data('order-id');
+            $(document).ready(function () {
+                $('.order-link').click(function () {
+                    var orderId = $(this).data('order-id');
+                    $.ajax({
+                        url: 'get_order_details.php',
+                        method: 'POST',
+                        data: {
+                            order_id: orderId
+                        },
+                        success: function (response) {
+                            $('#orderModal .modal-body').html(response);
+                            $('#orderModal').data('order-id',
+                                orderId); // order-id'yi modal'a set ediyoruz
+
+                            // Sipariş durumu kontrolü
+                            var statusNumber = $('#order_status_number').val();
+                            if (statusNumber == 3) { // Eğer sipariş tamamlanmışsa
+                                $('#orderModal .btn-danger')
+                                    .hide(); // "Masa Kapat" butonunu gizle
+                            } else {
+                                $('#orderModal .btn-danger')
+                                    .show(); // Diğer durumda butonu göster
+                            }
+
+                            $('#orderModal').modal('show');
+                        }
+                    });
+                });
+            });
+
+
+            function closeTable() {
+                var orderId = $('#orderModal').data('order-id');
                 $.ajax({
-                    url: 'get_order_details.php',
+                    url: 'close_table.php',
                     method: 'POST',
                     data: {
                         order_id: orderId
                     },
-                    success: function(response) {
-                        $('#orderModal .modal-body').html(response);
-                        $('#orderModal').data('order-id',
-                        orderId); // order-id'yi modal'a set ediyoruz
-
-                        // Sipariş durumu kontrolü
-                        var statusNumber = $('#order_status_number').val();
-                        if (statusNumber == 3) { // Eğer sipariş tamamlanmışsa
-                            $('#orderModal .btn-danger')
-                        .hide(); // "Masa Kapat" butonunu gizle
-                        } else {
-                            $('#orderModal .btn-danger')
-                        .show(); // Diğer durumda butonu göster
-                        }
-
-                        $('#orderModal').modal('show');
+                    success: function (response) {
+                        alert(response);
+                        $('#orderModal').modal('hide');
+                        location.reload(); // Sayfayı yeniden yükleyerek güncellemeleri göster
                     }
                 });
-            });
-        });
-
-
-        function closeTable() {
-            var orderId = $('#orderModal').data('order-id');
-            $.ajax({
-                url: 'close_table.php',
-                method: 'POST',
-                data: {
-                    order_id: orderId
-                },
-                success: function(response) {
-                    alert(response);
-                    $('#orderModal').modal('hide');
-                    location.reload(); // Sayfayı yeniden yükleyerek güncellemeleri göster
-                }
-            });
-        }
+            }
         </script>
 </body>

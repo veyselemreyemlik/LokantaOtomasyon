@@ -4,6 +4,7 @@
         background-color: #f1f1f1;
         padding: 20px 10px;
         width: 100%;
+        font-family: "Alegreya Sans", sans-serif;
     }
 
     /* Style the header links */
