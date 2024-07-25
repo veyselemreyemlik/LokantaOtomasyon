@@ -17,8 +17,31 @@ if (isset($_POST['order_id'])) {
         $order_details = $result_order_details->fetch_assoc();
         echo '<p><strong>Sipariş Numarası:</strong> ' . $order_details['order_id'] . '</p>';
         echo '<p><strong>Masa:</strong> ' . $order_details['table_name'] . '</p>';
-        echo '<p><strong>Sipariş Zamanı:</strong> ' . $order_details['created_at'] . '</p>';
+        $order_created_at = new DateTime($order_details['created_at']);
+        $formatted_date = $order_created_at->format('H:i d/m/Y');
+        echo '<p><strong>Sipariş Zamanı:</strong>  ' . $formatted_date . '</p>';
         echo '<p><strong>Garson:</strong> ' . $order_details['waiter_name'] . '</p>';
+
+        // Sipariş durumunu metin olarak ekleyin
+        $status_text = '';
+        switch ($order_details['status_number']) {
+            case 0:
+                $status_text = 'Sipariş hazırlanıyor';
+                break;
+            case 1:
+                $status_text = 'Sipariş hazırlandı';
+                break;
+            case 2:
+                $status_text = 'Teslim edildi';
+                break;
+            case 3:
+                $status_text = 'Ödemesi yapıldı';
+                break;
+            default:
+                $status_text = 'Bilinmiyor';
+        }
+        echo '<p><strong>Sipariş Durumu:</strong> ' . $status_text . '</p>';
+
         echo '<hr>';
         echo '<h5>Sipariş Detayları:</h5>';
         echo '<ul>';
