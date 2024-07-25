@@ -9,12 +9,29 @@ include "../sidebar.php";
 <head>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+            background-color: #DDDDDD;
+            font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: indigo;
         }
 
         .content {
             padding: 50px;
+        }
+
+        .btn-red {
+            background-color: #19376D;
+            border-color: #576CBC;
+            color: whitesmoke;
+            font-weight: bold;
+
+        }
+
+        .btn-red:hover {
+            background-color: #576CBC;
+            border-color: #19376D;
+            color: whitesmoke;
+            font-weight: bold;
+
         }
 
         .table-container {
@@ -28,7 +45,7 @@ include "../sidebar.php";
             font-size: 28px;
             font-weight: 600;
             margin-bottom: 20px;
-            color: #343a40;
+            color: #0B2447;
             text-align: center;
         }
 
@@ -37,7 +54,7 @@ include "../sidebar.php";
         }
 
         .table thead th {
-            background-color: #343a40;
+            background-color: #0B2447;
             color: #ffffff;
         }
 
@@ -59,10 +76,18 @@ include "../sidebar.php";
         }
 
 
-
         .table-container {
             margin: auto;
             padding-top: 20px;
+        }
+
+        .btn-duzenle {
+            background-color: #4682A9;
+            color: whitesmoke;
+        }
+
+        .btn-delete {
+            background-color: #BB2525;
         }
     </style>
 </head>
@@ -73,7 +98,7 @@ include "../sidebar.php";
 
         <!-- Ekleme Butonu -->
         <div class="mb-3 text-end">
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Yeni Masa Ekle
             </button>
         </div>
@@ -98,12 +123,12 @@ include "../sidebar.php";
                             <th scope='row'><?php echo $row["table_id"]; ?></th>
                             <td><?php echo $row["table_name"]; ?></td>
                             <td>
-                                <button type='button' class='btn btn-primary btn-sm' data-bs-toggle='modal'
+                                <button type='button' class='btn btn-duzenle btn-sm' data-bs-toggle='modal'
                                     data-bs-target='#exampleModal<?php echo $row["table_id"]; ?>'>
                                     Düzenle
                                 </button>
                                 <a href='table_delete.php?table_id=<?php echo $row["table_id"]; ?>'
-                                    class='btn btn-danger btn-sm'
+                                    class='btn btn-delete btn-sm'
                                     onclick='return confirm("Bu masayı silmek istediğinizden emin misiniz?")'>
                                     Sil
                                 </a>
