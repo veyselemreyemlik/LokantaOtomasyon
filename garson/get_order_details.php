@@ -27,7 +27,7 @@ if (isset($_GET['order_id'])) {
         FROM orders o
         JOIN order_details od ON o.order_id = od.order_id
         JOIN menu_items mi ON od.menu_id = mi.menu_id
-        WHERE od.status_number=0 AND o.order_id = $order_id";
+        WHERE od.status_number=1 AND o.order_id = $order_id";
 
 
         $result = $conn->query($sql);
