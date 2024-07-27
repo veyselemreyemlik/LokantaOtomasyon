@@ -17,7 +17,7 @@ $result = $conn->query($sql);
 $total_revenues = array_fill(1, 12, 0); // 1'den 12'ye kadar ayları kapsayan bir dizi oluştur
 
 if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
         $total_revenues[$row['month']] = $row['total_revenue'];
     }
 }
@@ -46,7 +46,7 @@ $result3 = $conn->query($sql3);
 $total_revenue = array_fill(0, 24, 0); // 0'dan 23'e kadar saatleri kapsayan bir dizi oluştur
 
 if ($result3->num_rows > 0) {
-    while($row = $result3->fetch_assoc()) {
+    while ($row = $result3->fetch_assoc()) {
         $total_revenue[$row['hour']] = $row['total_revenue'];
     }
 }
@@ -59,11 +59,17 @@ $months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "A�
 ?>
 
 <style>
-.col-md-7,
-.col-md-4 {
-    margin-bottom: 50px;
-    margin-top: 50px;
-}
+    body {
+        background-color: #DDDDDD;
+        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #071952;
+    }
+
+    .col-md-7,
+    .col-md-4 {
+        margin-bottom: 50px;
+        margin-top: 50px;
+    }
 </style>
 
 <div class="row">
@@ -86,28 +92,28 @@ $months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "A�
                 </thead>
                 <tbody>
                     <?php
-               $sql4 = "SELECT u.username as username, COUNT(o.order_id) as order_count
+                    $sql4 = "SELECT u.username as username, COUNT(o.order_id) as order_count
                FROM orders o
                INNER JOIN users u ON o.user_id = u.user_id
                WHERE o.status_number = '3' AND DATE(o.created_at) = DATE(CURDATE())
                GROUP BY u.username";
-       
 
-                $result4 = $conn->query($sql4);
 
-                if ($result4->num_rows > 0) {
-                    while ($row = $result4->fetch_assoc()) {
+                    $result4 = $conn->query($sql4);
+
+                    if ($result4->num_rows > 0) {
+                        while ($row = $result4->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['order_count']) . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
                         echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['order_count']) . "</td>";
+                        echo "<td colspan='2'>Hiç sipariş bulunamadı.</td>";
                         echo "</tr>";
                     }
-                } else {
-                    echo "<tr>";
-                    echo "<td colspan='2'>Hiç sipariş bulunamadı.</td>";
-                    echo "</tr>";
-                }
-                ?>
+                    ?>
                 </tbody>
             </table>
         </div>
@@ -131,24 +137,25 @@ $months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "A�
                 </thead>
                 <tbody>
                     <?php
-                        $max_rows = 10; // Görüntülenecek maksimum satır sayısı
-                        $row_count = 0;
+                    $max_rows = 10; // Görüntülenecek maksimum satır sayısı
+                    $row_count = 0;
 
-                        if ($result2->num_rows > 0) {
-                            while($row = $result2->fetch_assoc()) {
-                                if ($row_count >= $max_rows) break;
-                                echo "<tr>";
-                                echo "<td>" . htmlspecialchars($row['menu_item']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['total_sold']) . "</td>";
-                                echo "</tr>";
-                                $row_count++;
-                            }
-                        } else {
+                    if ($result2->num_rows > 0) {
+                        while ($row = $result2->fetch_assoc()) {
+                            if ($row_count >= $max_rows)
+                                break;
                             echo "<tr>";
-                            echo "<td colspan='2'>Satılan menü öğesi bulunamadı</td>";
+                            echo "<td>" . htmlspecialchars($row['menu_item']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['total_sold']) . "</td>";
                             echo "</tr>";
+                            $row_count++;
                         }
-                        ?>
+                    } else {
+                        echo "<tr>";
+                        echo "<td colspan='2'>Satılan menü öğesi bulunamadı</td>";
+                        echo "</tr>";
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
@@ -161,99 +168,99 @@ $months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "A�
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var ctx1 = document.getElementById('monthlySalesChart').getContext('2d');
-    var monthlySalesChart = new Chart(ctx1, {
-        type: 'bar',
-        data: {
-            labels: <?php echo json_encode($months); ?>,
-            datasets: [{
-                label: 'Toplam Satış Tutarı (TL)',
-                data: <?php echo json_encode(array_values($total_revenues)); ?>,
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return value.toLocaleString('tr-TR') + ' TL';
-                        }
-                    }
-                }
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx1 = document.getElementById('monthlySalesChart').getContext('2d');
+        var monthlySalesChart = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode($months); ?>,
+                datasets: [{
+                    label: 'Toplam Satış Tutarı (TL)',
+                    data: <?php echo json_encode(array_values($total_revenues)); ?>,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
             },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            var label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function (value) {
+                                return value.toLocaleString('tr-TR') + ' TL';
                             }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y.toLocaleString('tr-TR') + ' TL';
-                            }
-                            return label;
-                        }
-                    }
-                }
-            }
-        }
-    });
-
-    var ctx2 = document.getElementById('dailySalesChart').getContext('2d');
-    var dailySalesChart = new Chart(ctx2, {
-        type: 'bar',
-        data: {
-            labels: <?php echo json_encode($hours); ?>,
-            datasets: [{
-                label: 'Toplam Satış Tutarı (TL)',
-                data: <?php echo json_encode(array_values($total_revenue)); ?>,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return value.toLocaleString('tr-TR') + ' TL';
                         }
                     }
                 },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Saatler'
-                    }
-                }
-            },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            var label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                var label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toLocaleString('tr-TR') + ' TL';
+                                }
+                                return label;
                             }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y.toLocaleString('tr-TR') + ' TL';
-                            }
-                            return label;
                         }
                     }
                 }
             }
-        }
+        });
+
+        var ctx2 = document.getElementById('dailySalesChart').getContext('2d');
+        var dailySalesChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode($hours); ?>,
+                datasets: [{
+                    label: 'Toplam Satış Tutarı (TL)',
+                    data: <?php echo json_encode(array_values($total_revenue)); ?>,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function (value) {
+                                return value.toLocaleString('tr-TR') + ' TL';
+                            }
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Saatler'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                var label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toLocaleString('tr-TR') + ' TL';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
     });
-});
 </script>
 
 <?php

@@ -60,6 +60,8 @@ include "../sidebar.php";
         margin: auto;
         padding-top: 20px;
     }
+
+    
     </style>
 </head>
 

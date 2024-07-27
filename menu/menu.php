@@ -9,7 +9,7 @@ include "../sidebar.php"; ?>
         body {
             background-color: #DDDDDD;
             font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            color: indigo;
+            color: #000d20;
         }
 
         .content {
@@ -25,16 +25,16 @@ include "../sidebar.php"; ?>
         }
 
         .btn-red {
-            background-color: #19376D;
+            background-color: white;
             border-color: #576CBC;
-            color: whitesmoke;
+            color: #576CBC;
             font-weight: bold;
 
         }
 
         .btn-red:hover {
             background-color: #576CBC;
-            border-color: #19376D;
+            border-color: 1px solid #19376D;
             color: whitesmoke;
             font-weight: bold;
 
@@ -44,8 +44,9 @@ include "../sidebar.php"; ?>
             font-size: 28px;
             font-weight: 600;
             margin-bottom: 20px;
-            color: #0B2447;
+            color: #002254;
             text-align: center;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
         }
 
         .table {
@@ -74,6 +75,33 @@ include "../sidebar.php"; ?>
         .table-container {
             margin: auto;
             padding-top: 20px;
+        }
+
+        .btn-edit {
+            background-color: #4682A9;
+            color: whitesmoke;
+        }
+
+        .btn-edit:hover {
+            background-color: #91C8E4;
+            color: whitesmoke;
+            border: 1px solid #4682A9;
+        }
+
+        .btn-delete {
+            background-color: #B70404;
+            color: whitesmoke;
+
+        }
+
+        .btn-delete:hover {
+            background-color: #C40C0C;
+            color: whitesmoke;
+            border-color: 1px solid #B70404;
+        }
+
+        tr {
+            font-weight: 550;
         }
     </style>
 </head>
@@ -117,11 +145,11 @@ include "../sidebar.php"; ?>
                             <td><?php echo $row["price"]; ?> TL</td>
                             <td><?php echo $row["place_name"]; ?></td>
                             <td>
-                                <button type='button' class='btn btn-primary btn-sm' data-bs-toggle='modal'
+                                <button type='button' class='btn btn-edit btn-sm' data-bs-toggle='modal'
                                     data-bs-target='#exampleModal<?php echo $row["menu_id"]; ?>'>
                                     Düzenle
                                 </button>
-                                <a href='menu_delete.php?menu_id=<?php echo $row["menu_id"]; ?>' class='btn btn-danger btn-sm'
+                                <a href='menu_delete.php?menu_id=<?php echo $row["menu_id"]; ?>' class='btn btn-delete btn-sm'
                                     onclick='return confirm("Bu ürünü silmek istediğinizden emin misiniz?")'>
                                     Sil
                                 </a>

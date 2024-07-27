@@ -79,7 +79,7 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
 
     .btn-red:hover {
         background-color: #576CBC;
-        border-color: #19376D;
+        border-color: white;
         color: whitesmoke;
         font-weight: bold;
 
@@ -102,7 +102,7 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
     }
 
     .row_desing {
-        background-color: #B4B4B8;
+        background-color: #C7C8CC;
         border-radius: 5px;
     }
 

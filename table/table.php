@@ -19,9 +19,9 @@ include "../sidebar.php";
         }
 
         .btn-red {
-            background-color: #19376D;
+            background-color: white;
             border-color: #576CBC;
-            color: whitesmoke;
+            color: #576CBC;
             font-weight: bold;
 
         }
@@ -47,6 +47,10 @@ include "../sidebar.php";
             margin-bottom: 20px;
             color: #0B2447;
             text-align: center;
+        }
+
+        tr {
+            font-weight: 550;
         }
 
         .table {
@@ -81,13 +85,27 @@ include "../sidebar.php";
             padding-top: 20px;
         }
 
-        .btn-duzenle {
+        .btn-edit {
             background-color: #4682A9;
             color: whitesmoke;
         }
 
+        .btn-edit:hover {
+            background-color: #91C8E4;
+            color: whitesmoke;
+            border: 1px solid #4682A9;
+        }
+
         .btn-delete {
-            background-color: #BB2525;
+            background-color: #B70404;
+            color: whitesmoke;
+
+        }
+
+        .btn-delete:hover {
+            background-color: #C40C0C;
+            color: whitesmoke;
+            border-color: 1px solid #B70404;
         }
     </style>
 </head>
@@ -123,7 +141,7 @@ include "../sidebar.php";
                             <th scope='row'><?php echo $row["table_id"]; ?></th>
                             <td><?php echo $row["table_name"]; ?></td>
                             <td>
-                                <button type='button' class='btn btn-duzenle btn-sm' data-bs-toggle='modal'
+                                <button type='button' class='btn btn-edit btn-sm' data-bs-toggle='modal'
                                     data-bs-target='#exampleModal<?php echo $row["table_id"]; ?>'>
                                     Düzenle
                                 </button>
