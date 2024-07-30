@@ -101,7 +101,7 @@ include "../sidebar.php"; ?>
         }
 
         tr {
-            font-weight: 550;
+            font-weight: 500;
         }
     </style>
 </head>

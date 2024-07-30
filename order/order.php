@@ -56,7 +56,11 @@ if (count($tables) > 0) {
             body {
                 background-color: #DDDDDD;
                 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-                color: black;
+                color: whitesmoke;
+            }
+
+            h6 {
+                color: whitesmoke;
             }
 
             .card-body {
@@ -65,14 +69,14 @@ if (count($tables) > 0) {
             }
 
             .btn-edit {
-                background-color: #4682A9;
-                color: whitesmoke;
+                background-color: #DFDFDE;
+                color: #006E7F;
             }
 
             .btn-edit:hover {
-                background-color: #91C8E4;
+                background-color: #66BFBF;
                 color: whitesmoke;
-                border: 1px solid #4682A9;
+                border: 1.5px solid whitesmoke;
             }
 
             .btn-delete {
@@ -93,11 +97,11 @@ if (count($tables) > 0) {
             }
 
             .status-ordered {
-                background-color: #28a745 !important;
+                background-color: #006E7F !important;
             }
 
             .status-prepared {
-                background-color: #28a745 !important;
+                background-color: #006E7F !important;
             }
 
             .status-awaiting-payment {
@@ -110,6 +114,10 @@ if (count($tables) > 0) {
 
             .status-unknown {
                 background-color: #ffffff !important;
+            }
+
+            .col-md-3 {
+                background-color: #DDDDDD;
             }
         </style>
         <div class="col-md-3">
