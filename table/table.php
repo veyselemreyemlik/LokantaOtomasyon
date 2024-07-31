@@ -49,10 +49,6 @@ include "../sidebar.php";
             text-align: center;
         }
 
-        tr {
-            font-weight: 550;
-        }
-
         .table {
             margin-bottom: 0;
         }
@@ -106,6 +102,10 @@ include "../sidebar.php";
             background-color: #C40C0C;
             color: whitesmoke;
             border-color: 1px solid #B70404;
+        }
+
+        tr {
+            font-weight: 500;
         }
     </style>
 </head>

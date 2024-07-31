@@ -1,5 +1,5 @@
 <?php
-include 'header.php';
+
 session_start();
 
 // Eğer kullanıcı giriş yapmamışsa login sayfasına yönlendir
@@ -34,5 +34,3 @@ $user_id = $_SESSION['user_id'];
 </body>
 
 </html>
-
-<?php include 'footer.php'; ?>

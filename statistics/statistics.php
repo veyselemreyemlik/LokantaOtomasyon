@@ -70,18 +70,27 @@ $months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "A�
         margin-bottom: 50px;
         margin-top: 50px;
     }
+
+    h3 {
+        font-size: 26px;
+        font-weight: 550;
+        margin-bottom: 20px;
+        color: #002254;
+        text-align: center;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+    }
 </style>
 
-<div class="row">
+<div class="row ">
     <div class="col-md-7">
 
-        <h2 class="mb-4"><?php echo date("d/m/Y", strtotime($current_date)); ?> Saatlik Satış Grafiği</h2>
+        <h3 class="mb-4"><?php echo date("d/m/Y", strtotime($current_date)); ?> Saatlik Satış Grafiği</h3>
         <canvas id="dailySalesChart" style="height:400px;"></canvas>
 
     </div>
     <div class="col-md-4">
 
-        <h2 class="mb-4"><?php echo date("d/m/Y", strtotime($current_date)); ?> Kullanıcı Siparişleri</h2>
+        <h3 class="mb-4"><?php echo date("d/m/Y", strtotime($current_date)); ?> Kullanıcı Siparişleri</h3>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -122,11 +131,11 @@ $months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "A�
 
     <hr>
     <div class="col-md-7">
-        <h2 class="mb-4"><?php echo $current_year; ?> Yılı Satış Grafiği</h2>
+        <h3 class="mb-4"><?php echo $current_year; ?> Yılı Satış Grafiği</h3>
         <canvas id="monthlySalesChart" style="height:400px;"></canvas>
     </div>
     <div class="col-md-4">
-        <h2 class="mb-4"><?php echo $current_year; ?> Yılı Satış Tablosu</h2><br>
+        <h3 class="mb-4"><?php echo $current_year; ?> Yılı Satış Tablosu</h3><br>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
