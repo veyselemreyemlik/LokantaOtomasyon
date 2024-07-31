@@ -39,96 +39,114 @@ $conn->close();
 <head>
     <title>Yeni Sipariş</title>
     <style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f8f9fa;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #dddddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-    .order-form {
-        background-color: #fff;
-        padding: 40px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        width: 400px;
-    }
+        .order-form {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
 
-    .order-form h1 {
-        margin-bottom: 20px;
-        font-size: 24px;
-    }
+        .order-form h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
 
-    .order-form label {
-        display: block;
-        margin-bottom: 5px;
-        color: #333;
-    }
+        .order-form label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
 
-    .order-form select,
-    .order-form input[type="number"],
-    .order-form input[type="text"] {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 20px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-        color: #666;
-    }
+        .order-form select,
+        .order-form input[type="number"],
+        .order-form input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            color: #666;
+        }
 
-    .order-form button {
-        display: inline-block;
-        width: 100%;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        background-color: #5cb85c;
-        color: #fff;
-        font-size: 16px;
-        cursor: pointer;
-    }
+        .order-form button {
+            display: inline-block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #91C8E4;
+            color: #176B87;
+            border: 1.5px solid whitesmoke;
+        }
 
-    .order-form button:hover {
-        background-color: #4cae4c;
-    }
+        .order-form button:hover {
+            background-color: #134B70;
+            color: whitesmoke;
+            border: 1px solid #4682A9;
+        }
 
-    .order-items {
-        margin-top: 20px;
-    }
+        .order-items {
+            margin-top: 20px;
+        }
 
-    .order-items div {
-        background-color: #f9f9f9;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-    }
+        .order-items div {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
 
-    h1 {
-        text-align: center;
-    }
+        h1 {
+            text-align: center;
+        }
 
-    label {
-        font-weight: initial;
-    }
+        label {
+            font-weight: initial;
+        }
+
+        .header {
+            color: #4f709c;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+        }
+
+        label {
+            color: #91C8E4;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+        }
+
+        .btn-olustur {}
     </style>
 </head>
 
 <body>
 
     <div class="order-form">
-        <h1>Masa <?php echo htmlspecialchars($table_name); ?> İçin Yeni Sipariş</h1>
+        <h1 class="header">Masa <?php echo htmlspecialchars($table_name); ?> Sipariş Ekranı</h1>
 
         <form id="orderForm">
             <input type="hidden" name="table_id" value="<?php echo htmlspecialchars($table_id); ?>">
             <label for="menu_id">Ürün:</label>
             <select name="menu_id" id="menu_id">
                 <?php foreach ($menu_items as $item): ?>
-                <option value="<?php echo htmlspecialchars($item['menu_id']); ?>">
-                    <?php echo htmlspecialchars($item['menu_name']); ?></option>
+                    <option value="<?php echo htmlspecialchars($item['menu_id']); ?>">
+                        <?php echo htmlspecialchars($item['menu_name']); ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
             <label for="piece">Adet:</label>
@@ -140,71 +158,71 @@ $conn->close();
 
         <div class="order-items" id="orderItems"></div>
 
-        <button type="button" onclick="submitOrder()">Siparişi Oluştur</button>
+        <button class="btn-olustur" type="button" onclick="submitOrder()">Siparişi Oluştur</button>
     </div>
 
     <script>
-    let orderItems = [];
+        let orderItems = [];
 
-    function addItem() {
-        const menuIdElement = document.getElementById('menu_id');
-        const pieceElement = document.getElementById('piece');
-        const statementElement = document.getElementById('statement');
+        function addItem() {
+            const menuIdElement = document.getElementById('menu_id');
+            const pieceElement = document.getElementById('piece');
+            const statementElement = document.getElementById('statement');
 
-        const menuId = menuIdElement.value;
-        const piece = pieceElement.value;
-        const statement = statementElement.value;
-        const productName = menuIdElement.options[menuIdElement.selectedIndex].text;
+            const menuId = menuIdElement.value;
+            const piece = pieceElement.value;
+            const statement = statementElement.value;
+            const productName = menuIdElement.options[menuIdElement.selectedIndex].text;
 
-        if (piece && menuId) {
-            orderItems.push({
-                menu_id: menuId,
-                piece: piece,
-                statement: statement,
-                menu_name: productName
-            });
+            if (piece && menuId) {
+                orderItems.push({
+                    menu_id: menuId,
+                    piece: piece,
+                    statement: statement,
+                    menu_name: productName
+                });
 
-            const orderItemsContainer = document.getElementById('orderItems');
-            const itemDiv = document.createElement('div');
-            itemDiv.textContent = `Ürün: ${productName}, Adet: ${piece}, Açıklama: ${statement}`;
-            orderItemsContainer.appendChild(itemDiv);
+                const orderItemsContainer = document.getElementById('orderItems');
+                const itemDiv = document.createElement('div');
+                itemDiv.textContent = `Ürün: ${productName}, Adet: ${piece}, Açıklama: ${statement}`;
+                orderItemsContainer.appendChild(itemDiv);
 
-            pieceElement.value = '';
-            statementElement.value = '';
-        }
-    }
-
-    function redirectToAddOrder(tableId, orderId) {
-        window.location.href = 'new_order.php?table_id=' + tableId + '&order_id=' + orderId;
-    }
-
-    function submitOrder() {
-        if (orderItems.length === 0) {
-            alert('Sipariş eklemeden oluşturamazsınız.');
-            return;
+                pieceElement.value = '';
+                statementElement.value = '';
+            }
         }
 
-        const formData = new FormData();
-        formData.append('table_id', document.querySelector('input[name="table_id"]').value);
-        formData.append('order_items', JSON.stringify(orderItems));
+        function redirectToAddOrder(tableId, orderId) {
+            window.location.href = 'new_order.php?table_id=' + tableId + '&order_id=' + orderId;
+        }
 
-        fetch('save_order.php', {
+        function submitOrder() {
+            if (orderItems.length === 0) {
+                alert('Sipariş eklemeden oluşturamazsınız.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('table_id', document.querySelector('input[name="table_id"]').value);
+            formData.append('order_items', JSON.stringify(orderItems));
+
+            fetch('save_order.php', {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Sipariş başarıyla oluşturuldu.');
-                    window.location.href = 'garson_order.php'; // Yerel bir yönlendirme yapabilirsiniz
-                } else {
-                    alert('Sipariş oluşturulurken bir hata oluştu: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Hata:', error);
-            });
-    }
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Sipariş başarıyla oluşturuldu.');
+                        window.location.href = 'garson_order.php'; // Yerel bir yönlendirme yapabilirsiniz
+                    } else {
+                        alert('Sipariş oluşturulurken bir hata oluştu: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Hata:', error);
+                });
+        }
     </script>
 
 </body>

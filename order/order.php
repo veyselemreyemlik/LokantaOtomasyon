@@ -129,7 +129,7 @@ if (count($tables) > 0) {
             }
 
             .status-unknown {
-                background-color: #ffffff !important;
+                background-color: #606676 !important;
             }
 
             .col-md-3 {

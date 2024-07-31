@@ -47,6 +47,7 @@ if ($table_id) {
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
+            color: #343a40;
         }
 
         .content {
