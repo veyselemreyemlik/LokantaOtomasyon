@@ -59,8 +59,24 @@ if (count($tables) > 0) {
                 color: whitesmoke;
             }
 
-            h6 {
-                color: whitesmoke;
+            .text-style {
+                font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                color: #DDE6ED;
+            }
+
+            .card.mb-3.status-prepared {
+                background-color: #749BC2 !important;
+            }
+
+            .fs-5 {
+                color: black;
+            }
+
+            .modal-body {
+                position: relative;
+                flex: 1 1 auto;
+                padding: var(--bs-modal-padding);
+                color: black;
             }
 
             .card-body {
@@ -105,7 +121,7 @@ if (count($tables) > 0) {
             }
 
             .status-awaiting-payment {
-                background-color: #17a2b8 !important;
+                background-color: #DDDDDD !important;
             }
 
             .status-empty {
@@ -119,11 +135,22 @@ if (count($tables) > 0) {
             .col-md-3 {
                 background-color: #DDDDDD;
             }
+
+            .btn-closed {
+                background-color: #DFDFDE;
+                color: #006E7F;
+            }
+
+            .btn-closed:hover {
+                background-color: #91C8E4;
+                color: whitesmoke;
+                border: 1.5px solid whitesmoke;
+            }
         </style>
         <div class="col-md-3">
             <div class="card mb-3 <?php echo $status_class; ?>" style="max-width: 18rem;">
                 <div class="card-body">
-                    <h5 class="card-title title">MASA <?php echo htmlspecialchars($table['table_name']); ?></h5>
+                    <h5 class="card-title title text-style">MASA <?php echo htmlspecialchars($table['table_name']); ?></h5>
                     <?php if (isset($table['order_id']) && $table['status_number'] != 3): ?>
                         <h6 class="card-subtitle mb-2 text-body-secondary">Sipariş Numarası: <?php echo $table['order_id']; ?></h6>
                     <?php else: ?>
@@ -184,7 +211,7 @@ if (count($tables) > 0) {
                                         onclick="confirmPayment(<?php echo $table['order_id']; ?>)">Ödeme Yapıldı</button>
                                 <?php endif;
                             } ?>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                            <button type="button" class="btn btn-closed" data-bs-dismiss="modal">Kapat</button>
                         </div>
                     </div>
                 </div>
