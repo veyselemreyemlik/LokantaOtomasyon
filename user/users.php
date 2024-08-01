@@ -45,8 +45,9 @@ include "../sidebar.php";
             font-size: 28px;
             font-weight: 600;
             margin-bottom: 20px;
-            color: #0B2447;
+            color: #002254;
             text-align: center;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
         }
 
         .table {
