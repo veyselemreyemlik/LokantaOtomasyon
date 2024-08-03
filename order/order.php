@@ -52,172 +52,120 @@ if (count($tables) > 0) {
             }
         }
         ?>
-        <style>
-            body {
-                background-color: #DDDDDD;
-                font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-                color: whitesmoke;
-            }
+<meta http-equiv="refresh" content="5">
+<style>
+body {
+    background-color: #DDDDDD;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: whitesmoke;
+}
 
-            .text-style {
-                font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-                color: #DDE6ED;
-            }
 
-            .card.mb-3.status-prepared {
-                background-color: #749BC2 !important;
-            }
+.text-style {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #DDE6ED;
+}
 
-            .fs-5 {
-                color: black;
-            }
+.card.mb-3.status-prepared {
+    background-color: #749BC2 !important;
+}
 
-            .modal-body {
-                position: relative;
-                flex: 1 1 auto;
-                padding: var(--bs-modal-padding);
-                color: black;
-            }
+.fs-5 {
+    color: black;
+}
 
-            .card-body {
-                height: 180px;
-                width: 200px;
-            }
+.modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    padding: var(--bs-modal-padding);
+    color: black;
+}
 
-            .btn-edit {
-                background-color: #DFDFDE;
-                color: #006E7F;
-            }
+.card-body {
+    height: 180px;
+    width: 200px;
+}
 
-            .btn-edit:hover {
-                background-color: #66BFBF;
-                color: whitesmoke;
-                border: 1.5px solid whitesmoke;
-            }
+.btn-edit {
+    background-color: #DFDFDE;
+    color: #006E7F;
+}
 
-            .btn-delete {
-                background-color: #B70404;
-                color: whitesmoke;
-            }
+.btn-edit:hover {
+    background-color: #66BFBF;
+    color: whitesmoke;
+    border: 1.5px solid whitesmoke;
+}
 
-            .btn-delete:hover {
-                background-color: #C40C0C;
-                color: whitesmoke;
-                border-color: 1px solid #B70404;
-            }
+.btn-delete {
+    background-color: #B70404;
+    color: whitesmoke;
+}
 
-            .title {
-                font-weight: bold;
-                padding-bottom: 5px;
-                padding-left: 10px;
-            }
+.btn-delete:hover {
+    background-color: #C40C0C;
+    color: whitesmoke;
+    border-color: 1px solid #B70404;
+}
 
-            .status-ordered {
-                background-color: #006E7F !important;
-            }
+.title {
+    font-weight: bold;
+    padding-bottom: 5px;
+    padding-left: 10px;
+}
 
-            .status-prepared {
-                background-color: #006E7F !important;
-            }
+.status-ordered {
+    background-color: #006E7F !important;
+}
 
-            .status-awaiting-payment {
-                background-color: #DDDDDD !important;
-            }
+.status-prepared {
+    background-color: #006E7F !important;
+}
 
-            .status-empty {
-                background-color: #6c757d !important;
-            }
+.status-awaiting-payment {
+    background-color: #F5A623 !important;
+}
 
-            .status-unknown {
-                background-color: #606676 !important;
-            }
+.status-empty {
+    background-color: #6c757d !important;
+}
 
-            .col-md-3 {
-                background-color: #DDDDDD;
-            }
+.status-unknown {
+    background-color: #606676 !important;
+}
 
-            .btn-closed {
-                background-color: #DFDFDE;
-                color: #006E7F;
-            }
+.col-md-3 {
+    background-color: #DDDDDD;
+}
 
-            .btn-closed:hover {
-                background-color: #91C8E4;
-                color: whitesmoke;
-                border: 1.5px solid whitesmoke;
-            }
-        </style>
-        <div class="col-md-3">
-            <div class="card mb-3 <?php echo $status_class; ?>" style="max-width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title title text-style">MASA <?php echo htmlspecialchars($table['table_name']); ?></h5>
-                    <?php if (isset($table['order_id']) && $table['status_number'] != 3): ?>
-                        <h6 class="card-subtitle mb-2 text-body-secondary">Sipariş Numarası: <?php echo $table['order_id']; ?></h6>
-                    <?php else: ?>
-                        <h6 class="card-subtitle mb-2 text-body-secondary">Sipariş Numarası: -</h6>
-                    <?php endif; ?>
-                    <p class="card-text"><b><?php echo $status_text; ?></b></p>
-                    <?php if (isset($table['order_id']) && $table['status_number'] != 3): ?>
-                        <button type="button" class="btn btn-edit" data-bs-toggle="modal"
-                            data-bs-target="#modal<?php echo $table['order_id']; ?>">
-                            Detaylar
-                        </button>
-                    <?php endif; ?>
-                </div>
-            </div>
+.btn-closed {
+    background-color: #DFDFDE;
+    color: #006E7F;
+}
+
+.btn-closed:hover {
+    background-color: #91C8E4;
+    color: whitesmoke;
+    border: 1.5px solid whitesmoke;
+}
+</style>
+<div class="col-md-3">
+    <div class="card mb-3 <?php echo $status_class; ?>" style="max-width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title title text-style">MASA <?php echo htmlspecialchars($table['table_name']); ?></h5>
+            <?php if (isset($table['order_id']) && $table['status_number'] != 3): ?>
+            <h6 class="card-subtitle mb-2 text-body-secondary">Sipariş Numarası: <?php echo $table['order_id']; ?></h6>
+            <?php else: ?>
+            <h6 class="card-subtitle mb-2 text-body-secondary">Sipariş Numarası: -</h6>
+            <?php endif; ?>
+            <p class="card-text"><b><?php echo $status_text; ?></b></p>
+            <?php if (isset($table['order_id']) && $table['status_number'] != 3): ?>
+            <a href="modal.php?order_id=<?php echo $table['order_id']; ?>" class="btn btn-edit">Detaylar</a>
+            <?php endif; ?>
         </div>
-
-        <!-- Modal -->
-        <?php if (isset($table['order_id']) && $table['status_number'] != 3): ?>
-            <div class="modal fade" id="modal<?php echo $table['order_id']; ?>" tabindex="-1"
-                aria-labelledby="modalLabel<?php echo $table['order_id']; ?>" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="modalLabel<?php echo $table['order_id']; ?>">Sipariş Detayları -
-                                Sipariş Numarası: <?php echo $table['order_id']; ?></h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body" id="modalBody<?php echo $table['order_id']; ?>">
-                            <!-- Sipariş detayları burada AJAX ile yüklenecek -->
-                        </div>
-                        <div class="modal-footer" style="justify-content: center;">
-                            <?php
-                            if ($table['status_number'] == 2) { ?>
-                                <div class="row">
-                                    <div class="col-md-7">
-                                        <input type="number" id="paymentAmount<?php echo $table['order_id']; ?>"
-                                            placeholder="Ödeme miktarı" class="form-control">
-                                    </div>
-                                    <div class="col-md-5">
-                                        <select id="paymentType<?php echo $table['order_id']; ?>" class="form-select">
-                                            <option value="">Ödeme Türü</option>
-                                            <option value="1">Nakit</option>
-                                            <option value="2">Kart</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12"></div>
-                                </div>
-                                <?php if ($table['status_number'] == 2): ?>
-                                    <button type="button" class="btn btn-success"
-                                        onclick="applyDiscount(<?php echo $table['order_id']; ?>, 5,  <?php echo $table['total_price']; ?>)">%5</button>
-                                    <button type="button" class="btn btn-success"
-                                        onclick="applyDiscount(<?php echo $table['order_id']; ?>, 10, <?php echo $table['total_price']; ?>)">%10</button>
-                                    <button type="button" class="btn btn-success"
-                                        onclick="applyDiscount(<?php echo $table['order_id']; ?>, 20, <?php echo $table['total_price']; ?>)">%20</button>
-                                    <button type="button" class="btn btn-danger"
-                                        onclick="confirmPayment(<?php echo $table['order_id']; ?>)">Ödeme Yapıldı</button>
-                                <?php endif;
-                            } ?>
-                            <button type="button" class="btn btn-closed" data-bs-dismiss="modal">Kapat</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <?php endif; ?>
-    <?php
+    </div>
+</div>
+<?php
     }
     echo '</div>';
 } else {
@@ -225,59 +173,3 @@ if (count($tables) > 0) {
 }
 $conn->close();
 ?>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('button[data-bs-toggle="modal"]').click(function () {
-            var orderId = $(this).data('bs-target').replace('#modal', '');
-            $.ajax({
-                url: 'get_order_details.php',
-                type: 'GET',
-                data: {
-                    order_id: orderId
-                },
-                success: function (response) {
-                    $('#modalBody' + orderId).html(response);
-                }
-            });
-        });
-    });
-
-    function applyDiscount(orderId, discountPercentage, totalPrice) {
-        var discountedAmount = totalPrice - (totalPrice * discountPercentage / 100);
-        $('#paymentAmount' + orderId).val(discountedAmount.toFixed(2));
-    }
-
-    function confirmPayment(orderId) {
-        var paymentAmount = $('#paymentAmount' + orderId).val();
-        var paymentType = $('#paymentType' + orderId).val();
-
-        if (!paymentAmount) {
-            alert('Lütfen ödeme miktarını giriniz.');
-            return;
-        }
-
-        if (!paymentType) {
-            alert('Lütfen ödeme türünü seçiniz.');
-            return;
-        }
-        $.ajax({
-            url: 'update_order_status.php',
-            type: 'POST',
-            data: {
-                order_id: orderId,
-                payment: paymentAmount,
-                payment_type: paymentType
-            },
-            success: function (response) {
-                if (response == 'success') {
-                    alert('Ödeme yapıldı.');
-                    location.reload(); // Sayfayı yenileyerek güncel durumu göster
-                } else {
-                    alert('Hata: ' + response);
-                }
-            }
-        });
-    }
-</script>

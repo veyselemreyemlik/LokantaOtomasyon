@@ -61,7 +61,7 @@ if (!$result_monthly_revenue) {
 $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
 ?>
 <!-- HTML ve CSS kodları devam ediyor... -->
-
+<meta http-equiv="refresh" content="10">
 <style>
     body {
         background-color: #DDDDDD;

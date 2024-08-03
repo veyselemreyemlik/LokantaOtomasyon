@@ -71,15 +71,16 @@
         }
 
         .sidebar .logo {
-            width: 50%;
+            width: 100%;
             /* Sidebar'ın genişliğine göre ayarlanabilir */
             height: auto;
             /* Otomatik olarak orantıyı korur */
             margin-bottom: 20px;
             /* Logonun altında boşluk bırakır */
-            margin-left: 50px;
+           /* margin-left: 50px; */
             margin-right: auto;
         }
+        
     </style>
 </head>
 
@@ -90,7 +91,7 @@
 
     <div class="sidebar">
         <div class="logo ">
-            <img src="../image/logo.png" alt="Logo" class="logo">
+            <img style="width: %100;" src="../image/logo.png" alt="Logo" class="logo">
         </div>
         <a href="../admin/admin.php"><i class="fas fa-home"></i> Ana Sayfa</a>
         <a href="../menu/menu.php"><i class="fas fa-utensils"></i> Menü </a>
