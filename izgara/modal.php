@@ -79,7 +79,7 @@
     </script>
     <script>
     function markDetailAsReady(detailId, orderId) {
-        if (confirm('Bu sipariş detayını hazır olarak işaretlemek istediğinizden emin misiniz?')) {
+       
             $.ajax({
                 url: 'update_order_status.php',
                 type: 'POST',
@@ -101,7 +101,7 @@
                 }
             });
         }
-    }
+    
     </script>
 </body>
 

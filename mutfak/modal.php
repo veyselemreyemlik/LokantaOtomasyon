@@ -79,28 +79,27 @@
     </script>
     <script>
     function markDetailAsReady(detailId, orderId) {
-        if (confirm('Bu sipariş detayını hazır olarak işaretlemek istediğinizden emin misiniz?')) {
-            $.ajax({
-                url: 'update_order_status.php',
-                type: 'POST',
-                data: {
-                    detail_id: detailId,
-                    order_id: orderId,
-                    status_number: 1
-                },
-                success: function(response) {
-                    if (response === 'success') {
-                        alert('Sipariş detayı başarıyla hazırlandı.');
-                        location.reload(); // Sayfayı yeniden yükle
-                    } else {
-                        alert('Hata: ' + response);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Hatası:', status, error);
+
+        $.ajax({
+            url: 'update_order_status.php',
+            type: 'POST',
+            data: {
+                detail_id: detailId,
+                order_id: orderId,
+                status_number: 1
+            },
+            success: function(response) {
+                if (response === 'success') {
+                    alert('Sipariş detayı başarıyla hazırlandı.');
+                    location.reload(); // Sayfayı yeniden yükle
+                } else {
+                    alert('Hata: ' + response);
                 }
-            });
-        }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Hatası:', status, error);
+            }
+        });
     }
     </script>
 </body>
