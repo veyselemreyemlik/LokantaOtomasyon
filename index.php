@@ -47,8 +47,8 @@ $place_name = $user['place_name'];
         <p><?php echo $place_name; ?> Yetkisine Sahipsiniz. Diğer Sayfalara Giremezsiniz.</p>
         
         <div class="btn-group btn-group-lg" role="group">
-            <a href="Admin/Admin.php" class="btn btn-danger">Admin Sayfası</a>
-            <a href="Garson/Garson_Order.php" class="btn btn-warning">Garson Sayfası</a>
+            <a href="admin/admin.php" class="btn btn-danger">Admin Sayfası</a>
+            <a href="garson/garson_Order.php" class="btn btn-warning">Garson Sayfası</a>
             <a href="izgara/izgara.php" class="btn btn-primary">Izgara Sayfası</a>
             <a href="firin/firin.php" class="btn btn-light">Fırın Sayfası</a>
             <a href="mutfak/mutfak.php" class="btn btn-success">Mutfak Sayfası</a>

@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$username = "root";
-$password = "";
+$username = "serefiye_galaapps";
+$password = ".Unc7JMZGWy6GzJ";
 $dbname = "lokantaOtomasyon";
 
 // Create connection

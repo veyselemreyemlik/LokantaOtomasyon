@@ -5,31 +5,7 @@ if (!isset($_GET['order_id'])) {
     echo "Sipariş ID'si belirtilmemiş.";
     exit;
 }
-session_start();
-            
-            
-            if (!isset($_SESSION['user_id'])) {
-                header("Location: ../login.php");
-                exit();
-            }
-            
-            $user_id = $_SESSION['user_id'];
-            
-            // Kullanıcının place_id'sini veritabanından çek
-            $result = $conn->query("SELECT place_id FROM users WHERE user_id = $user_id");
-            
-            if ($result->num_rows > 0) {
-                $user = $result->fetch_assoc();
-                if ($user['place_id'] != 4) {
-                    header("Location: ../index.php");
-                    exit();
-                }
-            } else {
-                // Eğer kullanıcı bulunamazsa, oturumu sonlandır ve login sayfasına yönlendir
-                session_destroy();
-                header("Location: ../login.php");
-                exit();
-            }
+
 $order_id = $_GET['order_id'];
 
 // Sipariş detaylarını ve toplam fiyatı hesaplamak için gerekli SQL sorgusu
