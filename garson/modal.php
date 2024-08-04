@@ -1,9 +1,28 @@
 <?php
+session_start();
 include '../connection.php';
 
-if (!isset($_GET['order_id'])) {
-    echo "Sipariş numarası belirtilmedi.";
-    exit;
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
+
+// Kullanıcının place_id'sini veritabanından çek
+$result = $conn->query("SELECT place_id FROM users WHERE user_id = $user_id");
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+    if ($user['place_id'] != 5) {
+        header("Location: ../index.php");
+        exit();
+    }
+} else {
+    // Eğer kullanıcı bulunamazsa, oturumu sonlandır ve login sayfasına yönlendir
+    session_destroy();
+    header("Location: ../login.php");
+    exit();
 }
 
 $order_id = intval($_GET['order_id']);
@@ -34,7 +53,7 @@ $table_name = $order['table_name'];
 $details_sql = "SELECT od.piece, mi.menu_name, od.statement
                 FROM order_details od
                 JOIN menu_items mi ON od.menu_id = mi.menu_id
-                WHERE od.order_id = ? AND mi.place_id = 1";
+                WHERE od.order_id = ?";
 $stmt = $conn->prepare($details_sql);
 if (!$stmt) {
     echo "Sipariş detayları sorgusu hazırlama hatası: " . $conn->error;

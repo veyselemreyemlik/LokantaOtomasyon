@@ -1,5 +1,31 @@
 <?php include "../connection.php";
-include "../sidebar.php"; ?>
+include "../sidebar.php"; 
+session_start();
+
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
+
+// Kullanıcının place_id'sini veritabanından çek
+$result = $conn->query("SELECT place_id FROM users WHERE user_id = $user_id");
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+    if ($user['place_id'] != 4) {
+        header("Location: ../index.php");
+        exit();
+    }
+} else {
+    // Eğer kullanıcı bulunamazsa, oturumu sonlandır ve login sayfasına yönlendir
+    session_destroy();
+    header("Location: ../login.php");
+    exit();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="tr">
@@ -129,6 +155,8 @@ include "../sidebar.php"; ?>
             </thead>
             <tbody class="table-secondary">
                 <?php
+
+
                 $sql = "SELECT mi.menu_id, mi.menu_name, mi.price, p.place_name, mi.place_id 
                     FROM menu_items mi 
                     LEFT JOIN place p ON mi.place_id = p.place_id
