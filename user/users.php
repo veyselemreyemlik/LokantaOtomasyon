@@ -11,7 +11,6 @@ include "../sidebar.php";
     <style>
         body {
             background-color: #DDDDDD;
-            font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
             color: indigo;
         }
 
