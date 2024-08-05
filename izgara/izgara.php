@@ -9,26 +9,49 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-    .card {
-        margin-bottom: 1rem;
-    }
+        body {
+            background-color: #DDDDDD;
+            font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: black;
+        }
 
-    .card-body {
-        padding: 1rem;
-        height: auto;
-    }
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            margin-top: 20px;
+            color: #002254;
+            text-align: center;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+        }
+
+        .card {
+            margin-bottom: 1rem;
+        }
+
+        .row {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            padding: 50px;
+        }
+
+        .card-body {
+            padding: 1rem;
+            height: auto;
+        }
     </style>
 </head>
 
 <body style="padding-top: 20px;">
-<h1 style="text-align:center">IZGARA SİPARİŞLERI</h1>
+    <h1 style="text-align:center">IZGARA SİPARİŞLERİ</h1>
     <div class="container">
         <div class="row">
             <?php
-            
+
             include '../connection.php';
-            
-            
+
+
 
             $sql = "SELECT o.order_id, t.table_name, o.status_number
             FROM orders o
@@ -62,21 +85,22 @@
                     }
                     ?>
 
-            <div class="col-md-4 mb-3">
-                <div class="card <?php echo $card_color; ?>">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Sipariş Numarası: <?php echo htmlspecialchars($order['order_id']); ?>
-                        </h5>
-                        <h6 class="card-subtitle mb-2 text-body-secondary">Masa:
-                            <?php echo htmlspecialchars($order['table_name']); ?></h6>
-                        <p class="card-text"><b><?php echo $status_text; ?></b></p>
-                        <a href="modal.php?order_id=<?php echo $order['order_id']; ?>" class="btn btn-primary">
-                            Detaylar
-                        </a>
+                    <div class="col-md-4 mb-3">
+                        <div class="card <?php echo $card_color; ?>">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Sipariş Numarası: <?php echo htmlspecialchars($order['order_id']); ?>
+                                </h5>
+                                <h6 class="card-subtitle mb-2 text-body-secondary">Masa:
+                                    <?php echo htmlspecialchars($order['table_name']); ?>
+                                </h6>
+                                <p class="card-text"><b><?php echo $status_text; ?></b></p>
+                                <a href="modal.php?order_id=<?php echo $order['order_id']; ?>" class="btn btn-primary">
+                                    Detaylar
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <?php
+                    <?php
                 }
             } else {
                 echo "Detay bulunamadı.";
@@ -89,7 +113,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
+        </script>
 </body>
 
 </html>
