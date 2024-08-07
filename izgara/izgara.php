@@ -9,37 +9,52 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-        body {
-            background-color: #DDDDDD;
-            font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            color: black;
-        }
+    body {
+        background-color: #DDDDDD;
+        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: black;
+    }
 
-        h1 {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            margin-top: 20px;
-            color: #002254;
-            text-align: center;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
-        }
+    h1 {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 30px;
+        margin-top: 20px;
+        color: #002254;
+        text-align: center;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+    }
 
-        .card {
-            margin-bottom: 1rem;
-        }
+    .card {
+        margin-bottom: 1rem;
+    }
 
-        .row {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            padding: 50px;
-        }
+    .row {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        padding: 50px;
+    }
 
-        .card-body {
-            padding: 1rem;
-            height: auto;
-        }
+    .btn {
+        background-color: #DFDFDE;
+        color: #176B87;
+    }
+
+    .btn:hover {
+        background-color: #7eaa92;
+        color: whitesmoke;
+        border: 1.5px solid whitesmoke;
+    }
+
+    .bg-success {
+        background-color: #F5A623 !important;
+    }
+
+    .card-body {
+        padding: 1rem;
+        height: auto;
+    }
     </style>
 </head>
 
@@ -50,7 +65,11 @@
             <?php
 
             include '../connection.php';
-
+            session_start();
+            if (!isset($_SESSION['user_id'])) {
+                header("Location: login.php");
+                exit;
+            }
 
 
             $sql = "SELECT o.order_id, t.table_name, o.status_number
@@ -85,22 +104,22 @@
                     }
                     ?>
 
-                    <div class="col-md-4 mb-3">
-                        <div class="card <?php echo $card_color; ?>">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Sipariş Numarası: <?php echo htmlspecialchars($order['order_id']); ?>
-                                </h5>
-                                <h6 class="card-subtitle mb-2 text-body-secondary">Masa:
-                                    <?php echo htmlspecialchars($order['table_name']); ?>
-                                </h6>
-                                <p class="card-text"><b><?php echo $status_text; ?></b></p>
-                                <a href="modal.php?order_id=<?php echo $order['order_id']; ?>" class="btn btn-primary">
-                                    Detaylar
-                                </a>
-                            </div>
-                        </div>
+            <div class="col-md-4 mb-3">
+                <div class="card <?php echo $card_color; ?>">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Sipariş Numarası: <?php echo htmlspecialchars($order['order_id']); ?>
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">Masa:
+                            <?php echo htmlspecialchars($order['table_name']); ?>
+                        </h6>
+                        <p class="card-text"><b><?php echo $status_text; ?></b></p>
+                        <a href="modal.php?order_id=<?php echo $order['order_id']; ?>" class="btn btn-primary">
+                            Detaylar
+                        </a>
                     </div>
-                    <?php
+                </div>
+            </div>
+            <?php
                 }
             } else {
                 echo "Detay bulunamadı.";
@@ -113,7 +132,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-        </script>
+    </script>
 </body>
 
 </html>

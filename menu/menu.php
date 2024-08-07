@@ -3,14 +3,11 @@ include "../sidebar.php";
 
 ?>
 
-<!DOCTYPE html>
-<html lang="tr">
 
-<head>
     <style>
         body {
             background-color: #DDDDDD;
-            font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             color: #000d20;
         }
 
@@ -106,9 +103,9 @@ include "../sidebar.php";
             font-weight: 500;
         }
     </style>
-</head>
 
-<body>
+
+
     <div class="table-container">
         <h1>Menü Yönetimi</h1>
 

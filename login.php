@@ -15,13 +15,13 @@ if (isset($_SESSION['user_id'])) {
         $user = $result->fetch_assoc();
         switch ($user['place_id']) {
             case 1:
-                header("Location: place/izgara.php");
+                header("Location: izgara/izgara.php");
                 exit;
             case 2:
-                header("Location: place/mutfak.php");
+                header("Location: mutfak/mutfak.php");
                 exit;
             case 3:
-                header("Location: place/firin.php");
+                header("Location: firin/firin.php");
                 exit;
             case 4:
                 header("Location: admin/admin.php");
