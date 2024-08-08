@@ -36,22 +36,34 @@ if (isset($_SESSION['user_id'])) {
     }
 }
 
+
 // Form gönderildiğinde
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Veritabanı bağlantısını dahil edin
+    include '../connection.php';
+    
+    // Kullanıcı adı ve şifreyi alın
     $username = $conn->real_escape_string($_POST['username']);
     $password = $_POST['password'];
 
+    // SQL sorgusu
     $sql = "SELECT * FROM users WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
+    // Kullanıcıyı kontrol edin
     if ($result && $result->num_rows == 1) {
         $user = $result->fetch_assoc();
 
-        if ($password === $user['password']) { // Bu kısmı parolaları hashlemek ve kontrol etmek için güncelleyin
+        // Şifre kontrolü (Not: Güvenlik için bu kısmı password_hash ve password_verify ile güncelleyin)
+        if ($password === $user['password']) { 
+            // Oturum değişkenlerini ayarlayın
             $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['place_id'] = $user['place_id'];  // place_id'yi oturuma kaydedin
+            
+            // Kullanıcının place_id'sine göre yönlendirin
             switch ($user['place_id']) {
                 case 1:
                     header("Location: izgara/izgara.php");
@@ -78,10 +90,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $error_message = "Kullanıcı adı veya şifre yanlış.";
     }
-}
 
-$conn->close();
+    // Veritabanı bağlantısını kapatın
+    $stmt->close();
+    $conn->close();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="tr">

@@ -124,7 +124,24 @@
             <?php
            
             include '../connection.php';
-            
+            session_start();
+                if (!isset($_SESSION['user_id'])) {
+                    header("Location: ../login.php");
+                    exit();
+                }
+
+                $user_id = $_SESSION['user_id'];
+                $place_id = $_SESSION['place_id'];
+
+                // Kullanıcının place_id'sini kontrol et
+                if ($place_id != 5) {
+                    if($place_id != 4){
+                        header("Location: ../index.php");
+                        exit();
+                    }
+                    
+                }
+          
             
             // Önce tüm masaları alıyoruz
             $sql = "SELECT t.table_id, t.table_name, o.order_id, o.status_number, o.payment, u.username

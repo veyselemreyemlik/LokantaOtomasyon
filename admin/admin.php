@@ -1,7 +1,24 @@
 <?php
 include '../connection.php';
 include '../sidebar.php';
+session_start();
+                if (!isset($_SESSION['user_id'])) {
+                    header("Location: ../login.php");
+                    exit();
+                }
 
+                $user_id = $_SESSION['user_id'];
+                $place_id = $_SESSION['place_id'];
+
+                // Kullanıcının place_id'sini kontrol et
+              
+                    if($place_id != 4){
+                        header("Location: ../index.php");
+                        exit();
+                    }
+                    
+                
+          
 
 
 // Günlük sipariş sayısı
@@ -59,96 +76,96 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
 <!-- HTML ve CSS kodları devam ediyor... -->
 <meta http-equiv="refresh" content="10">
 <style>
-    body {
-        background-color: #DDDDDD;
-        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        color: indigo;
-    }
+body {
+    background-color: #DDDDDD;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: indigo;
+}
 
-    .btn-red {
-        background-color: #19376D;
-        border-color: #576CBC;
-        color: whitesmoke;
-        font-weight: bold;
+.btn-red {
+    background-color: #19376D;
+    border-color: #576CBC;
+    color: whitesmoke;
+    font-weight: bold;
 
-    }
+}
 
-    .btn-red:hover {
-        background-color: #576CBC;
-        border-color: white;
-        color: whitesmoke;
-        font-weight: bold;
+.btn-red:hover {
+    background-color: #576CBC;
+    border-color: white;
+    color: whitesmoke;
+    font-weight: bold;
 
-    }
+}
 
-    .col-md-6 {
-        margin-top: 30px;
-    }
+.col-md-6 {
+    margin-top: 30px;
+}
 
-    .h3desing {
-        font-family: "Alegreya Sans", sans-serif;
-        font: 1.5em sans-serif;
-        color: #0B2447;
-        font-weight: 700;
-        text-align: center;
-    }
+.h3desing {
+    font-family: "Alegreya Sans", sans-serif;
+    font: 1.5em sans-serif;
+    color: #0B2447;
+    font-weight: 700;
+    text-align: center;
+}
 
-    .row {
-        margin-top: 20px;
-    }
+.row {
+    margin-top: 20px;
+}
 
-    .row_desing {
-        background-color: #C7C8CC;
-        border-radius: 5px;
-    }
+.row_desing {
+    background-color: #C7C8CC;
+    border-radius: 5px;
+}
 
-    .bg-color1 {
-        background-color: #79155B;
-        color: whitesmoke;
-        font-weight: bold;
-    }
+.bg-color1 {
+    background-color: #79155B;
+    color: whitesmoke;
+    font-weight: bold;
+}
 
-    .bg-color1:hover {
-        background-color: #C23373;
-        color: whitesmoke;
-        font-weight: bold;
-    }
+.bg-color1:hover {
+    background-color: #C23373;
+    color: whitesmoke;
+    font-weight: bold;
+}
 
-    .bg-color2 {
-        background-color: #19376D;
-        color: whitesmoke;
-        font-weight: bold;
-    }
+.bg-color2 {
+    background-color: #19376D;
+    color: whitesmoke;
+    font-weight: bold;
+}
 
-    .bg-color2:hover {
-        background-color: #576CBC;
-        color: whitesmoke;
-        font-weight: bold;
-    }
+.bg-color2:hover {
+    background-color: #576CBC;
+    color: whitesmoke;
+    font-weight: bold;
+}
 
-    .bg-color3 {
-        background-color: #618264;
-        color: whitesmoke;
-        font-weight: bold;
-    }
+.bg-color3 {
+    background-color: #618264;
+    color: whitesmoke;
+    font-weight: bold;
+}
 
-    .bg-color3:hover {
-        background-color: #79AC78;
-        color: whitesmoke;
-        font-weight: bold;
-    }
+.bg-color3:hover {
+    background-color: #79AC78;
+    color: whitesmoke;
+    font-weight: bold;
+}
 
-    .bg-color4 {
-        background-color: #6527BE;
-        color: whitesmoke;
-        font-weight: bold;
-    }
+.bg-color4 {
+    background-color: #6527BE;
+    color: whitesmoke;
+    font-weight: bold;
+}
 
-    .bg-color4:hover {
-        background-color: #9681EB;
-        color: whitesmoke;
-        font-weight: bold;
-    }
+.bg-color4:hover {
+    background-color: #9681EB;
+    color: whitesmoke;
+    font-weight: bold;
+}
 </style>
 
 <body>
@@ -273,57 +290,57 @@ $monthly_revenue_data = $result_monthly_revenue->fetch_assoc();
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5"></script>
         <script>
-            function confirmCloseCash() {
-                if (confirm("Kasa kapatmak istediğinizden emin misiniz?")) {
-                    document.getElementById('closeCashForm').submit();
-                }
+        function confirmCloseCash() {
+            if (confirm("Kasa kapatmak istediğinizden emin misiniz?")) {
+                document.getElementById('closeCashForm').submit();
             }
+        }
 
-            $(document).ready(function () {
-                $('.order-link').click(function () {
-                    var orderId = $(this).data('order-id');
-                    $.ajax({
-                        url: 'get_order_details.php',
-                        method: 'POST',
-                        data: {
-                            order_id: orderId
-                        },
-                        success: function (response) {
-                            $('#orderModal .modal-body').html(response);
-                            $('#orderModal').data('order-id',
-                                orderId); // order-id'yi modal'a set ediyoruz
-
-                            // Sipariş durumu kontrolü
-                            var statusNumber = $('#order_status_number').val();
-                            if (statusNumber == 3) { // Eğer sipariş tamamlanmışsa
-                                $('#orderModal .btn-danger')
-                                    .hide(); // "Masa Kapat" butonunu gizle
-                            } else {
-                                $('#orderModal .btn-danger')
-                                    .show(); // Diğer durumda butonu göster
-                            }
-
-                            $('#orderModal').modal('show');
-                        }
-                    });
-                });
-            });
-
-
-            function closeTable() {
-                var orderId = $('#orderModal').data('order-id');
+        $(document).ready(function() {
+            $('.order-link').click(function() {
+                var orderId = $(this).data('order-id');
                 $.ajax({
-                    url: 'close_table.php',
+                    url: 'get_order_details.php',
                     method: 'POST',
                     data: {
                         order_id: orderId
                     },
-                    success: function (response) {
-                        alert(response);
-                        $('#orderModal').modal('hide');
-                        location.reload(); // Sayfayı yeniden yükleyerek güncellemeleri göster
+                    success: function(response) {
+                        $('#orderModal .modal-body').html(response);
+                        $('#orderModal').data('order-id',
+                            orderId); // order-id'yi modal'a set ediyoruz
+
+                        // Sipariş durumu kontrolü
+                        var statusNumber = $('#order_status_number').val();
+                        if (statusNumber == 3) { // Eğer sipariş tamamlanmışsa
+                            $('#orderModal .btn-danger')
+                                .hide(); // "Masa Kapat" butonunu gizle
+                        } else {
+                            $('#orderModal .btn-danger')
+                                .show(); // Diğer durumda butonu göster
+                        }
+
+                        $('#orderModal').modal('show');
                     }
                 });
-            }
+            });
+        });
+
+
+        function closeTable() {
+            var orderId = $('#orderModal').data('order-id');
+            $.ajax({
+                url: 'close_table.php',
+                method: 'POST',
+                data: {
+                    order_id: orderId
+                },
+                success: function(response) {
+                    alert(response);
+                    $('#orderModal').modal('hide');
+                    location.reload(); // Sayfayı yeniden yükleyerek güncellemeleri göster
+                }
+            });
+        }
         </script>
 </body>

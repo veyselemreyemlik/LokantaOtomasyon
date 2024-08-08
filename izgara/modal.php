@@ -23,7 +23,25 @@
                      
                         include '../connection.php';
                        
+                        session_start();
+                            if (!isset($_SESSION['user_id'])) {
+                                header("Location: ../login.php");
+                                exit();
+                            }
 
+                            $user_id = $_SESSION['user_id'];
+                            $place_id = $_SESSION['place_id'];
+
+                            // Kullanıcının place_id'sini kontrol et
+                            if ($place_id != 1) {
+                                if($place_id != 4){
+                                    header("Location: ../index.php");
+                                    exit();
+                                }
+                                
+                            }
+          
+          
                         $order_id = $_GET['order_id'];
                         $sql = "SELECT od.detail_id, od.piece, mi.menu_name, od.statement
                         FROM order_details od

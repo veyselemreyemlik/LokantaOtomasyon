@@ -64,12 +64,25 @@
         <div class="row">
             <?php
 
-            include '../connection.php';
-            session_start();
-            if (!isset($_SESSION['user_id'])) {
-                header("Location: login.php");
-                exit;
-            }
+                include '../connection.php';
+                session_start();
+                if (!isset($_SESSION['user_id'])) {
+                    header("Location: ../login.php");
+                    exit();
+                }
+
+                $user_id = $_SESSION['user_id'];
+                $place_id = $_SESSION['place_id'];
+
+                // Kullanıcının place_id'sini kontrol et
+                if ($place_id != 1) {
+                    if($place_id != 4){
+                        header("Location: ../index.php");
+                        exit();
+                    }
+                    
+                }
+          
 
 
             $sql = "SELECT o.order_id, t.table_name, o.status_number
@@ -77,32 +90,32 @@
             JOIN tables t ON o.table_id = t.table_id
             WHERE o.status_number = 0
             AND EXISTS (
-                SELECT 1
-                FROM order_details od
-                JOIN menu_items mi ON od.menu_id = mi.menu_id
-                WHERE od.order_id = o.order_id
-                AND mi.place_id = 1
-                AND od.status_number = 0
+            SELECT 1
+            FROM order_details od
+            JOIN menu_items mi ON od.menu_id = mi.menu_id
+            WHERE od.order_id = o.order_id
+            AND mi.place_id = 1
+            AND od.status_number = 0
             )
             ORDER BY o.order_id DESC";
 
             $result = $conn->query($sql);
 
             if ($result === false) {
-                echo 'Hata: Veritabanı sorgusu başarısız: ' . $conn->error;
-                exit;
+            echo 'Hata: Veritabanı sorgusu başarısız: ' . $conn->error;
+            exit;
             }
 
             if ($result->num_rows > 0) {
-                while ($order = $result->fetch_assoc()) {
-                    $card_color = 'bg-secondary';
-                    $status_text = 'Sipariş verildi';
+            while ($order = $result->fetch_assoc()) {
+            $card_color = 'bg-secondary';
+            $status_text = 'Sipariş verildi';
 
-                    if ($order['status_number'] == 0) {
-                        $card_color = 'bg-success';
-                        $status_text = 'Sipariş verildi';
-                    }
-                    ?>
+            if ($order['status_number'] == 0) {
+            $card_color = 'bg-success';
+            $status_text = 'Sipariş verildi';
+            }
+            ?>
 
             <div class="col-md-4 mb-3">
                 <div class="card <?php echo $card_color; ?>">
