@@ -208,12 +208,12 @@
                         <p class="card-text"><b><?php echo $status_text; ?></b></p>
 
                         <?php if (isset($table['order_id']) && $table['status_number'] != 3): ?>
-                        <?php if ($table['status_number'] == 1): ?>
+                        
                         <button type="button" class="btn btn-detail"
                             onclick="redirectToDetails(<?php echo $table['order_id']; ?>)">
                             Detaylar
                         </button>
-                        <?php endif; ?>
+                        
                         <button type="button" class="btn btn-add me-2"
                             onclick="redirectToAddOrder(<?php echo $table['table_id']; ?>, <?php echo $table['order_id']; ?>)">Sipariş
                             Ekle</button>

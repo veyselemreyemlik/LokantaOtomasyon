@@ -74,7 +74,7 @@ if (file_exists($filename)) {
 }
 
 // Veriler
-$sheet->setCellValue('A'.$row, $today);
+$sheet->setCellValue('A'.$row, date('d/m/Y H:i'));
 $sheet->setCellValue('B'.$row, $data['total_orders']);
 $sheet->setCellValue('C'.$row, $data['total_revenue']);
 $sheet->setCellValue('D'.$row, $total_actual_revenue);

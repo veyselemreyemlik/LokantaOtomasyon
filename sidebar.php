@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Paneli</title>
+    <link rel="icon" href="/image/favicon.png" type="image/png">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -93,6 +95,7 @@
             <img style="width: %100;" src="../image/logo.png" alt="Logo" class="logo">
         </div>
         <a href="../admin/admin.php"><i class="fas fa-home"></i> Ana Sayfa</a>
+        <a href="../index/index.html"><i class="fas fa-angle-double-right"></i> Site Sayfası</a>
         <a href="../admin/transfer.php"><i class="fas fa-exchange-alt"></i> Yönlendirme</a>
         <a href="../menu/menu.php"><i class="fas fa-utensils"></i> Menü </a>
         <a href="../table/table.php"><i class="fas fa-table"></i> Masalar</a>

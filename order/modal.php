@@ -62,7 +62,8 @@ $order_status_texts = [
 
 // Sipariş detay durumu metinlerini tanımlayın (order_details tablosu)
 $detail_status_texts = [
-    1 => "Sipariş hazırlanıyor",
+    0 => "Sipariş hazırlanıyor",
+    1 => "Sipariş hazırlandı",
     2 => "Teslim edildi"
 ];
 

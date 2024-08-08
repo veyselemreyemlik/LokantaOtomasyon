@@ -36,7 +36,6 @@ if (isset($_SESSION['user_id'])) {
     }
 }
 
-
 // Form gönderildiğinde
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Veritabanı bağlantısını dahil edin
@@ -97,32 +96,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="tr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Giriş Yap</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <style>
         body {
-            background-color: #DDDDDD;
-            font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            color: indigo;
+            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
         }
 
         .container {
             max-width: 400px;
-            margin-top: 100px;
+            width: 100%;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
         }
+
+        .container img {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        .alert {
+            margin-top: 15px;
+        }
+        
     </style>
 </head>
 
 <body>
     <div class="container">
+        <img style="width: 100%;" src="image/logo.png" alt="Logo"> <!-- Burada logo görselinin yolunu belirtin -->
         <h2 class="mb-4">Giriş Yap</h2>
         <?php if (isset($error_message)): ?>
             <div class="alert alert-danger"><?php echo $error_message; ?></div>

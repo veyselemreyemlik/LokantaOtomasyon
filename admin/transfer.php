@@ -46,10 +46,10 @@ $place_name = $user['place_name'];
         
         <div class="btn-group btn-group-lg" role="group">
             <a href="admin.php" class="btn btn-danger">Admin Sayfası</a>
-            <a href="../garson/garson_order.php" class="btn btn-warning">Garson Sayfası</a>
-            <a href="../izgara/izgara.php" class="btn btn-primary">Izgara Sayfası</a>
-            <a href="../firin/firin.php" class="btn btn-light">Fırın Sayfası</a>
-            <a href="../mutfak/mutfak.php" class="btn btn-success">Mutfak Sayfası</a>
+            <a href="../garson/garson_order.php" target="_blank" class="btn btn-warning">Garson Sayfası</a>
+            <a href="../izgara/izgara.php" target="_blank" class="btn btn-primary">Izgara Sayfası</a>
+            <a href="../firin/firin.php" target="_blank" class="btn btn-light">Fırın Sayfası</a>
+            <a href="../mutfak/mutfak.php" target="_blank" class="btn btn-success">Mutfak Sayfası</a>
         </div>
     </div>
 </body>
